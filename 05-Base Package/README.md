@@ -1,0 +1,1 @@
+## This is the base package to deploy common resources
