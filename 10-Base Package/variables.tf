@@ -6,10 +6,10 @@ variable "DIVISION" {
   type = string
 }
 
-variable "DATAACTION_OAUTHCLIENT_ID" {
+variable "DATA_ACTION_OAUTHCLIENT_ID" {
   type = string
 }
 
-variable "DATAACTION_OAUTHCLIENT_SECRET" {
+variable "DATA_ACTION_OAUTHCLIENT_SECRET" {
   type = string
 }

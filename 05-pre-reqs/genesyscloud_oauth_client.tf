@@ -1,10 +1,6 @@
-locals {
-  roles = ["Developer","Master Admin","Supervisor","User"]
-}
-
 data "genesyscloud_auth_role" "ref_roles" {
-  count = length(local.roles)
-  name = local.roles[count.index]
+  count = length(var.ROLES)
+  name = var.ROLES[count.index]
 }
 
 resource "genesyscloud_oauth_client" "ref_data_actions_oauth_client" {
@@ -31,4 +27,9 @@ resource "genesyscloud_oauth_client" "ref_data_actions_oauth_client" {
       role_id = roles.value.id
     }
   }
+}
+
+output "NOTE" {  
+  value = format("*** Now make a note of the client-id and client secret for the OAuth Client: %s ***",
+    genesyscloud_oauth_client.ref_data_actions_oauth_client.name)
 }

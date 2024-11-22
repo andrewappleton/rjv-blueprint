@@ -66,3 +66,66 @@ resource "genesyscloud_integration_action" "ref_get_last_agent_handled_a_voice_i
 	})
 }
 
+
+resource "genesyscloud_integration_action" "ref_get_onqueue_agent_by_queueid" {
+  config_request {
+    request_template     = "{\"filter\": \n {\"type\": \"or\", \n \"predicates\": \n [{\"type\": \"dimension\",\n\"dimension\": \"queueId\",\n\"operator\": \"matches\",\n\"value\": \"$${input.QueueID}\"}]},\n\"metrics\": [\n\"oOnQueueUsers\",\n\"oUserPresences\"]}"
+    request_type         = "POST"
+    request_url_template = "/api/v2/analytics/queues/observations/query"
+  }
+  config_response {
+    success_template = "{\"onQueueIdle\": \"$${successTemplateUtils.firstFromArray($${onQueueIdle})}\", \"onQueueInteracting\": \"$${successTemplateUtils.firstFromArray($${onQueueInteracting})}\",\"onQueueNotResponding\": \"$${successTemplateUtils.firstFromArray($${onQueueNotResponding})}\",\"onQueueCommunicating\": \"$${successTemplateUtils.firstFromArray($${onQueueCommunicating})}\",\"onQueueUserCount\": \"$${successTemplateUtils.firstFromArray($${onQueueUserCount})}\"}"
+    translation_map = {
+      onQueueCommunicating = "$..data[?(@.metric == 'oOnQueueUsers' && @.qualifier == 'COMMUNICATING')].stats.count"
+      onQueueIdle          = "$..data[?(@.metric == 'oOnQueueUsers' && @.qualifier == 'IDLE')].stats.count"
+      onQueueInteracting   = "$..data[?(@.metric == 'oOnQueueUsers' && @.qualifier == 'INTERACTING')].stats.count"
+      onQueueNotResponding = "$..data[?(@.metric == 'oOnQueueUsers' && @.qualifier == 'NOT_RESPONDING')].stats.count"
+      onQueueUserCount     = "$..data[?(@.metric == 'oUserPresences' && @.qualifier == 'e08eaf1b-ee47-4fa9-a231-1200e284798f')].stats.count"
+    }
+  }
+  contract_input  = jsonencode({
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"additionalProperties": true,
+		"properties": {
+				"QueueID": {
+						"description": "Specify the QueueID (use Get Queue ID by Name action)",
+						"type": "string"
+				}
+		},
+		"required": [
+				"QueueID"
+		],
+		"type": "object"
+	})
+  integration_id  = genesyscloud_integration.ref_integration.id
+  name            = "${var.RESOURCE_PREFIX} onQueue Agent by QueueId"
+  category        = "${var.RESOURCE_PREFIX} Genesys Cloud Data Actions"
+  secure          = false
+  contract_output = jsonencode({
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"additionalProperties": true,
+		"properties": {
+				"onQueueCommunicating": {
+						"description": "Number of communicating on-queue agents",
+						"type": "string"
+				},
+				"onQueueIdle": {
+						"description": "Number of idle on-queue agents",
+						"type": "string"
+				},
+				"onQueueInteracting": {
+						"description": "Number of interacting on-queue agents",
+						"type": "string"
+				},
+				"onQueueNotResponding": {
+						"description": "Number of not responding on-queue agents",
+						"type": "string"
+				},
+				"onQueueUserCount": {
+						"description": "Number of on-queue agents",
+						"type": "string"
+				}
+		},
+		"type": "object"
+	})
+}
