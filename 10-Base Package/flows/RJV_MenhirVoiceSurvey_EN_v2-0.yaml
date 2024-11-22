@@ -1,0 +1,345 @@
+voiceSurvey:
+  name: RJV_MenhirVoiceSurvey_EN
+  division: "{{var_division}}"
+  startUpRef: "/voiceSurvey/bots/bot[Survey Bot_10]"
+  surveyForm:
+    name: RJV Menhir Voice Survey EN
+  defaultLanguage: en-us
+  supportedLanguages:
+    en-us:
+      textToSpeech:
+        Genesys Enhanced TTS:
+          voice: en-US-AIGenerate1Neural
+  settingsActionDefaults:
+    askForBoolean:
+      voiceEndOfInputTimeout:
+        lit:
+          seconds: 1
+    askForSlot:
+      voiceEndOfInputTimeout:
+        lit:
+          seconds: 1
+    askSurveyQuestion:
+      voiceEndOfInputTimeout:
+        lit:
+          seconds: 1
+    loopAnythingElse:
+      voiceEndOfInputTimeout:
+        lit:
+          seconds: 1
+  settingsErrorHandling:
+    errorHandling:
+      disconnect:
+        none: true
+    errorEventHandover:
+      exp: "MakeCommunication(\n  \"Sorry, an error occurred. Goodbye.\")"
+    recognitionFailureEventHandover:
+      exp: "MakeCommunication(\n  \"Sorry, I'm having trouble understanding you. Goodbye.\")"
+    recognitionFailureEventHandling:
+      disconnect:
+        none: true
+  settingsPrompts:
+    ensureAudioInPrompts: false
+    promptMediaToValidate:
+      - mediaType: audio
+      - mediaType: tts
+  settingsSpeechRec:
+    suppressRecording: false
+  tasks:
+    - task:
+        name: Intro
+        refId: Intro_11
+        actions:
+          - askSurveyQuestion:
+              name: Question 1
+              surveyQuestion:
+                RJV Menhir Voice Survey EN:
+                  lit:
+                    text: Was the employee friendly?
+              question:
+                exp: "MakeCommunication(\n  \"Was the employee friendly?\")"
+              answer:
+                exp: "MakeCommunication(\n  \"Press 1 for 'Yes'.  Press 2 for 'No'.\")"
+              noInput:
+                exp: "MakeCommunication(\n  \"Please answer the question.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"I didn't understand you.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - endTask:
+              name: Done - Intro
+              outputPath:
+                name: default
+    - task:
+        name: Conversation
+        refId: Conversation_15
+        actions:
+          - askSurveyQuestion:
+              name: Question 1
+              surveyQuestion:
+                RJV Menhir Voice Survey EN:
+                  lit:
+                    text: Has your issue been resolved to your satisfaction?
+              question:
+                exp: "MakeCommunication(\n  \"Has your issue been resolved to your satisfaction?\")"
+              answer:
+                exp: "MakeCommunication(\n  \"Press 1 for 'Yes'.  Press 2 for 'No'.\")"
+              noInput:
+                exp: "MakeCommunication(\n  \"Please answer the question.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"I didn't understand you.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - askSurveyQuestion:
+              name: Question 2
+              surveyQuestion:
+                RJV Menhir Voice Survey EN:
+                  lit:
+                    text: How satisfied are you with the solution on a scale of 1 to 5? 1 is not satisfied and 5 is very satisfied.
+              question:
+                exp: "MakeCommunication(\n  \"How satisfied are you with the solution on a scale of 1 to 5? 1 is not satisfied and 5 is very satisfied.\")"
+              answer:
+                exp: "MakeCommunication(\n  ToCommunication(NOT_SET))"
+              noInput:
+                exp: "MakeCommunication(\n  \"Please answer the question.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"I didn't understand you.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - endTask:
+              name: Done - Conversation
+              outputPath:
+                name: default
+    - task:
+        name: Closure
+        refId: Closure_20
+        actions:
+          - askSurveyQuestion:
+              name: Question 1
+              surveyQuestion:
+                RJV Menhir Voice Survey EN:
+                  lit:
+                    text: "Did the employee close politely?\n"
+              question:
+                exp: "MakeCommunication(\n  \"Did the employee close politely?\\n\")"
+              answer:
+                exp: "MakeCommunication(\n  \"Press 1 for 'Yes'.  Press 2 for 'No'.\")"
+              noInput:
+                exp: "MakeCommunication(\n  \"Please answer the question.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"I didn't understand you.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - askSurveyQuestion:
+              name: Question 2
+              surveyQuestion:
+                RJV Menhir Voice Survey EN:
+                  lit:
+                    text: Do you have any further comments or suggestions about the conversation?
+              question:
+                exp: "MakeCommunication(\n  \"Do you have any further comments or suggestions about the conversation?\")"
+              noInput:
+                exp: "MakeCommunication(\n  \"Please answer the question.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"I didn't understand you.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - endTask:
+              name: Done - Closure
+              outputPath:
+                name: default
+  settingsVoiceSurvey:
+    surveyQuestions:
+      - surveyQuestion:
+          text: Was the employee friendly?
+          answerOptions:
+            lit:
+              - lit:
+                  dtmf:
+                    lit: "1"
+                  text:
+                    lit: Yes
+              - lit:
+                  dtmf:
+                    lit: "2"
+                  text:
+                    lit: No
+      - surveyQuestion:
+          text: Has your issue been resolved to your satisfaction?
+          answerOptions:
+            lit:
+              - lit:
+                  dtmf:
+                    lit: "1"
+                  text:
+                    lit: Yes
+              - lit:
+                  dtmf:
+                    lit: "2"
+                  text:
+                    lit: No
+      - surveyQuestion:
+          text: How satisfied are you with the solution on a scale of 1 to 5? 1 is not satisfied and 5 is very satisfied.
+          answerOptions:
+            lit:
+              - lit:
+                  dtmf:
+                    lit: "1"
+                  text:
+                    lit: "1"
+              - lit:
+                  dtmf:
+                    lit: "2"
+                  text:
+                    lit: "2"
+              - lit:
+                  dtmf:
+                    lit: "3"
+                  text:
+                    lit: "3"
+              - lit:
+                  dtmf:
+                    lit: "4"
+                  text:
+                    lit: "4"
+              - lit:
+                  dtmf:
+                    lit: "5"
+                  text:
+                    lit: "5"
+      - surveyQuestion:
+          text: "Did the employee close politely?\n"
+          answerOptions:
+            lit:
+              - lit:
+                  dtmf:
+                    lit: "1"
+                  text:
+                    lit: Yes
+              - lit:
+                  dtmf:
+                    lit: "2"
+                  text:
+                    lit: No
+  settingsUserInput:
+    enableBargeIn:
+      lit: true
+    noMatchesMax:
+      lit: 3
+    noInputsMax:
+      lit: 3
+    noInputsTimeout:
+      lit:
+        seconds: 7
+    speechToTextSpeechDetectionSensitivity:
+      noValue: true
+    speechToTextMaxSpeechTimeout:
+      noValue: true
+    interDigitTimeout:
+      lit:
+        seconds: 3
+    dtmfTerminatingCharacter:
+      lit: "#"
+    confirmationRejectionsMax:
+      lit: 3
+    noMatchApology:
+      exp: "MakeCommunication(\n  \"Sorry.\")"
+    noInputApology:
+      exp: "MakeCommunication(\n  \"Sorry, I didn't hear you.\")"
+    noToConfirmationApology:
+      exp: "MakeCommunication(\n  \"My mistake.\")"
+    confirmationNoMatchApology:
+      exp: "MakeCommunication(\n  \"Sorry, please say yes or no.\")"
+    confirmationNoInputApology:
+      exp: "MakeCommunication(\n  \"Sorry, I didn't hear you.  Please say yes or no.\")"
+  bots:
+    - bot:
+        name: Survey Bot
+        refId: Survey Bot_10
+        actions:
+          - callTask:
+              name: Ask Question Group 1
+              targetTaskRef: "/voiceSurvey/tasks/task[Intro_11]"
+          - callTask:
+              name: Ask Question Group 2
+              targetTaskRef: "/voiceSurvey/tasks/task[Conversation_15]"
+          - callTask:
+              name: Ask Question Group 3
+              targetTaskRef: "/voiceSurvey/tasks/task[Closure_20]"
+          - disconnect:
+              name: Disconnect
+  settingsNaturalLanguageUnderstanding:
+    nluDomainVersion:
+      intents: []
+      entities:
+        - name: Group1_Question1
+          type: Group1_Question1_Type
+        - name: Group2_Question1
+          type: Group2_Question1_Type
+        - name: Group2_Question2
+          type: Group2_Question2_Type
+        - name: Group3_Question1
+          type: Group3_Question1_Type
+        - name: Group3_Question2
+          type: "builtin:any"
+      entityTypes:
+        - name: Group1_Question1_Type
+          description: The description of the Entity Type "Group1_Question1_Type"
+          mechanism:
+            type: List
+            restricted: true
+            items:
+              - value: Yes
+                synonyms:
+                  - "1"
+              - value: No
+                synonyms:
+                  - "2"
+        - name: Group2_Question1_Type
+          description: The description of the Entity Type "Group2_Question1_Type"
+          mechanism:
+            type: List
+            restricted: true
+            items:
+              - value: Yes
+                synonyms:
+                  - "1"
+              - value: No
+                synonyms:
+                  - "2"
+        - name: Group2_Question2_Type
+          description: The description of the Entity Type "Group2_Question2_Type"
+          mechanism:
+            type: List
+            restricted: true
+            items:
+              - value: "1"
+                synonyms:
+                  - "1"
+              - value: "2"
+                synonyms:
+                  - "2"
+              - value: "3"
+                synonyms:
+                  - "3"
+              - value: "4"
+                synonyms:
+                  - "4"
+              - value: "5"
+                synonyms:
+                  - "5"
+        - name: Group3_Question1_Type
+          description: The description of the Entity Type "Group3_Question1_Type"
+          mechanism:
+            type: List
+            restricted: true
+            items:
+              - value: Yes
+                synonyms:
+                  - "1"
+              - value: No
+                synonyms:
+                  - "2"
+      language: en-us
+      languageVersions: {}
+    mutedUtterances: []

@@ -1,0 +1,61 @@
+inboundEmail:
+  name: RJV_Menir
+  division: "{{var_division}}"
+  startUpRef: "/inboundEmail/states/state[Initial State_10]"
+  defaultLanguage: nl-nl
+  supportedLanguages:
+    nl-nl:
+      defaultLanguageSkill:
+        noValue: true
+  settingsInboundEmailHandling:
+    emailHandling:
+      disconnect:
+        none: true
+  settingsErrorHandling:
+    errorHandling:
+      disconnect:
+        none: true
+  states:
+    - state:
+        name: Initial State
+        refId: Initial State_10
+        variables:
+          - stringVariable:
+              name: State.LanguageSkill
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+        actions:
+          - updateData:
+              name: Update Data
+              statements:
+                - string:
+                    variable: State.LanguageSkill
+                    value:
+                      lit: RJV_Dutch_Written
+          - setParticipantData:
+              name: Set Participant Data
+              attributes:
+                - attribute:
+                    name:
+                      lit: LanguageTestSkill
+                    value:
+                      exp: State.LanguageSkill
+          - transferToAcd:
+              name: Transfer to ACD
+              targetQueue:
+                lit:
+                  name: RJV_Menhir_Email
+              overrideInQueueFlow:
+                name: RJV Default In-Queue Email
+              priority:
+                lit: 0
+              preferredAgents:
+                noValue: true
+              languageSkill:
+                exp: FindLanguageSkill(State.LanguageSkill)
+              appendSkills:
+                lit: true
+              directAgent:
+                noValue: true

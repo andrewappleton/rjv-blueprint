@@ -1,0 +1,343 @@
+voiceSurvey:
+  name: RJV_MenhirVoiceSurvey_FR
+  division: "{{var_division}}"
+  startUpRef: "/voiceSurvey/bots/bot[Survey Bot_10]"
+  surveyForm:
+    name: RJV Menhir Voice Survey FR
+  defaultLanguage: fr-fr
+  supportedLanguages:
+    fr-fr:
+      textToSpeech:
+        Genesys Enhanced TTS:
+          voice: fr-FR-AlainNeural
+  settingsActionDefaults:
+    askForBoolean:
+      voiceEndOfInputTimeout:
+        lit:
+          seconds: 1
+    askForSlot:
+      voiceEndOfInputTimeout:
+        lit:
+          seconds: 1
+    askSurveyQuestion:
+      voiceEndOfInputTimeout:
+        lit:
+          seconds: 1
+    loopAnythingElse:
+      voiceEndOfInputTimeout:
+        lit:
+          seconds: 1
+  settingsErrorHandling:
+    errorHandling:
+      disconnect:
+        none: true
+    errorEventHandover:
+      exp: "MakeCommunication(\n  \"Une erreur s'est produite. Au revoir !\")"
+    recognitionFailureEventHandover:
+      exp: "MakeCommunication(\n  \"Je n'arrive pas à vous comprendre. Toutes nos excuses. Au revoir !\")"
+    recognitionFailureEventHandling:
+      disconnect:
+        none: true
+  settingsPrompts:
+    ensureAudioInPrompts: false
+    promptMediaToValidate:
+      - mediaType: audio
+      - mediaType: tts
+  settingsSpeechRec:
+    suppressRecording: false
+  tasks:
+    - task:
+        name: Introduction
+        refId: Introduction_11
+        actions:
+          - askSurveyQuestion:
+              name: Question 1
+              surveyQuestion:
+                RJV Menhir Voice Survey FR:
+                  lit:
+                    text: L'employé était-il sympathique ?
+              question:
+                exp: "MakeCommunication(\n  \"L'employé était-il sympathique ?\")"
+              answer:
+                exp: "MakeCommunication(\n  \"Appuyez sur 1 pour Oui  Appuyez sur 2 pour Non\")"
+              noInput:
+                exp: "MakeCommunication(\n  \"Répondez à la question.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"Je n'ai pas compris.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - endTask:
+              name: Done - Introduction
+              outputPath:
+                name: default
+    - task:
+        name: Conversation
+        refId: Conversation_15
+        actions:
+          - askSurveyQuestion:
+              name: Question 1
+              surveyQuestion:
+                RJV Menhir Voice Survey FR:
+                  lit:
+                    text: Votre problème a-t-il été résolu à votre satisfaction ?
+              question:
+                exp: "MakeCommunication(\n  \"Votre problème a-t-il été résolu à votre satisfaction ?\")"
+              answer:
+                exp: "MakeCommunication(\n  \"Appuyez sur 1 pour Oui  Appuyez sur 2 pour Non\")"
+              noInput:
+                exp: "MakeCommunication(\n  \"Répondez à la question.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"Je n'ai pas compris.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - askSurveyQuestion:
+              name: Question 2
+              surveyQuestion:
+                RJV Menhir Voice Survey FR:
+                  lit:
+                    text: Dans quelle mesure êtes-vous satisfait de la solution sur une échelle de 1 à 5 ? 1 n’est pas satisfait et 5 est très satisfait.
+              question:
+                exp: "MakeCommunication(\n  \"Dans quelle mesure êtes-vous satisfait de la solution sur une échelle de 1 à 5 ? 1 n’est pas satisfait et 5 est très satisfait.\")"
+              answer:
+                exp: "MakeCommunication(\n  \"Appuyez sur 1 pour 1  Appuyez sur 2 pour 2  Appuyez sur 3 pour 3  Appuyez sur 4 pour 4  Appuyez sur 5 pour 5\")"
+              noInput:
+                exp: "MakeCommunication(\n  \"Répondez à la question.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"Je n'ai pas compris.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - endTask:
+              name: Done - Conversation
+              outputPath:
+                name: default
+    - task:
+        name: Fermeture
+        refId: Fermeture_20
+        actions:
+          - askSurveyQuestion:
+              name: Question 1
+              surveyQuestion:
+                RJV Menhir Voice Survey FR:
+                  lit:
+                    text: L'employé a-t-il mis fin à la conversation de manière amicale ?
+              question:
+                exp: "MakeCommunication(\n  \"L'employé a-t-il mis fin à la conversation de manière amicale ?\")"
+              answer:
+                exp: "MakeCommunication(\n  \"Appuyez sur 1 pour Oui  Appuyez sur 2 pour Non\")"
+              noInput:
+                exp: "MakeCommunication(\n  \"Répondez à la question.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"Je n'ai pas compris.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - askSurveyQuestion:
+              name: Question 2
+              surveyQuestion:
+                RJV Menhir Voice Survey FR:
+                  lit:
+                    text: Avez-vous des suggestions ou des commentaires sur la conversation ?
+              question:
+                exp: "MakeCommunication(\n  \"Avez-vous des suggestions ou des commentaires sur la conversation ?\")"
+              noInput:
+                exp: "MakeCommunication(\n  \"Répondez à la question.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"Je n'ai pas compris.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - endTask:
+              name: Done - Fermeture
+              outputPath:
+                name: default
+  settingsVoiceSurvey:
+    surveyQuestions:
+      - surveyQuestion:
+          text: L'employé était-il sympathique ?
+          answerOptions:
+            lit:
+              - lit:
+                  dtmf:
+                    lit: "1"
+                  text:
+                    lit: Oui
+              - lit:
+                  dtmf:
+                    lit: "2"
+                  text:
+                    lit: Non
+      - surveyQuestion:
+          text: Votre problème a-t-il été résolu à votre satisfaction ?
+          answerOptions:
+            lit:
+              - lit:
+                  dtmf:
+                    lit: "1"
+                  text:
+                    lit: Oui
+              - lit:
+                  dtmf:
+                    lit: "2"
+                  text:
+                    lit: Non
+      - surveyQuestion:
+          text: Dans quelle mesure êtes-vous satisfait de la solution sur une échelle de 1 à 5 ? 1 n’est pas satisfait et 5 est très satisfait.
+          answerOptions:
+            lit:
+              - lit:
+                  dtmf:
+                    lit: "1"
+                  text:
+                    lit: "1"
+              - lit:
+                  dtmf:
+                    lit: "2"
+                  text:
+                    lit: "2"
+              - lit:
+                  dtmf:
+                    lit: "3"
+                  text:
+                    lit: "3"
+              - lit:
+                  dtmf:
+                    lit: "4"
+                  text:
+                    lit: "4"
+              - lit:
+                  dtmf:
+                    lit: "5"
+                  text:
+                    lit: "5"
+      - surveyQuestion:
+          text: L'employé a-t-il mis fin à la conversation de manière amicale ?
+          answerOptions:
+            lit:
+              - lit:
+                  dtmf:
+                    lit: "1"
+                  text:
+                    lit: Oui
+              - lit:
+                  dtmf:
+                    lit: "2"
+                  text:
+                    lit: Non
+  settingsUserInput:
+    enableBargeIn:
+      lit: true
+    noMatchesMax:
+      lit: 3
+    noInputsMax:
+      lit: 3
+    noInputsTimeout:
+      lit:
+        seconds: 7
+    speechToTextSpeechDetectionSensitivity:
+      noValue: true
+    speechToTextMaxSpeechTimeout:
+      noValue: true
+    interDigitTimeout:
+      lit:
+        seconds: 3
+    dtmfTerminatingCharacter:
+      lit: "#"
+    confirmationRejectionsMax:
+      lit: 3
+    noMatchApology:
+      exp: "MakeCommunication(\n  \"Désolé !\")"
+    noInputApology:
+      exp: "MakeCommunication(\n  \"Désolé, je n'ai pas entendu ce que vous avez dit.\")"
+    noToConfirmationApology:
+      exp: "MakeCommunication(\n  \"C'est une erreur de ma part.\")"
+    confirmationNoMatchApology:
+      exp: "MakeCommunication(\n  \"Désolé, répondez par oui ou non.\")"
+    confirmationNoInputApology:
+      exp: "MakeCommunication(\n  \"Désolé, je n'ai pas entendu ce que vous avez dit. Répondez par oui ou non.\")"
+  bots:
+    - bot:
+        name: Survey Bot
+        refId: Survey Bot_10
+        actions:
+          - callTask:
+              name: Ask Question Group 1
+              targetTaskRef: "/voiceSurvey/tasks/task[Introduction_11]"
+          - callTask:
+              name: Ask Question Group 2
+              targetTaskRef: "/voiceSurvey/tasks/task[Conversation_15]"
+          - callTask:
+              name: Ask Question Group 3
+              targetTaskRef: "/voiceSurvey/tasks/task[Fermeture_20]"
+          - disconnect:
+              name: Disconnect
+  settingsNaturalLanguageUnderstanding:
+    nluDomainVersion:
+      intents: []
+      entities:
+        - name: Group1_Question1
+          type: Group1_Question1_Type
+        - name: Group2_Question1
+          type: Group2_Question1_Type
+        - name: Group2_Question2
+          type: Group2_Question2_Type
+        - name: Group3_Question1
+          type: Group3_Question1_Type
+        - name: Group3_Question2
+          type: "builtin:any"
+      entityTypes:
+        - mechanism:
+            items:
+              - synonyms:
+                  - "1"
+                value: Oui
+              - synonyms:
+                  - "2"
+                value: Non
+            restricted: true
+            type: List
+          name: Group1_Question1_Type
+          description: The description of the Entity Type "Group1_Question1_Type"
+        - mechanism:
+            items:
+              - synonyms:
+                  - "1"
+                value: Oui
+              - synonyms:
+                  - "2"
+                value: Non
+            restricted: true
+            type: List
+          name: Group2_Question1_Type
+          description: The description of the Entity Type "Group2_Question1_Type"
+        - mechanism:
+            items:
+              - synonyms:
+                  - "1"
+                value: "1"
+              - synonyms:
+                  - "2"
+                value: "2"
+              - synonyms:
+                  - "3"
+                value: "3"
+              - synonyms:
+                  - "4"
+                value: "4"
+              - synonyms:
+                  - "5"
+                value: "5"
+            restricted: true
+            type: List
+          name: Group2_Question2_Type
+          description: The description of the Entity Type "Group2_Question2_Type"
+        - mechanism:
+            items:
+              - synonyms:
+                  - "1"
+                value: Oui
+              - synonyms:
+                  - "2"
+                value: Non
+            restricted: true
+            type: List
+          name: Group3_Question1_Type
+          description: The description of the Entity Type "Group3_Question1_Type"
+      language: fr-fr

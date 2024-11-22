@@ -1,0 +1,1749 @@
+inqueueCall:
+  name: RJV Menhir In-Queue New
+  division: "{{var_division}}"
+  defaultLanguage: nl-nl
+  supportedLanguages:
+    de-de:
+      defaultLanguageSkill:
+        noValue: true
+      textToSpeech:
+        Genesys Enhanced TTS:
+          voice: de-DE-Standard-A
+    en-gb:
+      defaultLanguageSkill:
+        noValue: true
+      textToSpeech:
+        Genesys Enhanced TTS:
+          voice: en-GB-Standard-A
+    en-us:
+      defaultLanguageSkill:
+        noValue: true
+      textToSpeech:
+        Genesys Enhanced TTS:
+          voice: en-US-Standard-A
+    fr-fr:
+      defaultLanguageSkill:
+        noValue: true
+      textToSpeech:
+        Genesys Enhanced TTS:
+          voice: fr-FR-Standard-A
+    nl-nl:
+      defaultLanguageSkill:
+        noValue: true
+      textToSpeech:
+        Genesys Enhanced TTS:
+          voice: nl-NL-Standard-A
+  variables:
+    - integerVariable:
+        name: Flow.CallbackEwtThreshold
+        initialValue:
+          noValue: true
+    - booleanVariable:
+        name: Flow.CallbackOffered
+        initialValue:
+          noValue: true
+    - booleanVariable:
+        name: Flow.CallbackRepeat
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.CallbackScheduleGroup
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.CalledDNIS
+        initialValue:
+          noValue: true
+    - integerVariable:
+        name: Flow.CurrentCBThreshold
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.EndOfLoopTransferNumber
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.EndOfLoopTreatment
+        initialValue:
+          noValue: true
+    - booleanVariable:
+        name: Flow.FlowCallbackScheduleOpen
+        initialValue:
+          noValue: true
+    - booleanVariable:
+        name: Flow.OfferCallback
+        initialValue:
+          noValue: true
+    - booleanVariable:
+        name: Flow.OfferVM
+        initialValue:
+          noValue: true
+    - booleanVariable:
+        name: Flow.PlayEWT
+        initialValue:
+          noValue: true
+    - booleanVariable:
+        name: Flow.PlayPositionInQueue
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.Prompt_Postfix
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.PromptEndOfLoop
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.QueueMusic
+        initialValue:
+          noValue: true
+    - integerVariable:
+        name: Flow.QueueMusic_Time
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.QueueStartPrompt
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.QueueStartPrompt2
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.QueueStartPrompt3
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.QueueWaitPrompt
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.QueueWaitPrompt2
+        initialValue:
+          noValue: true
+    - booleanVariable:
+        name: Flow.QueueWaitPrompt2Played
+        initialValue:
+          noValue: true
+    - booleanVariable:
+        name: Flow.QueueWaitPrompt2Repeat
+        initialValue:
+          noValue: true
+    - integerVariable:
+        name: Flow.QueueWaitPrompt2Threshold
+        initialValue:
+          noValue: true
+    - booleanVariable:
+        name: Flow.QueueWaitPromptPlayed
+        initialValue:
+          noValue: true
+    - booleanVariable:
+        name: Flow.QueueWaitPromptRepeat
+        initialValue:
+          noValue: true
+    - integerVariable:
+        name: Flow.QueueWaitPromptThreshold
+        initialValue:
+          noValue: true
+    - integerVariable:
+        name: Flow.QueueWaitRepeats
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.TablesDivision
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Flow.Voice
+        initialValue:
+          noValue: true
+  settingsInQueueCall:
+    holdMusic:
+      lit:
+        name: Prompt.RJV_MoH_asmallmiracle
+  settingsActionDefaults:
+    playAudioOnSilence:
+      timeout:
+        lit:
+          seconds: 40
+    detectSilence:
+      timeout:
+        lit:
+          seconds: 40
+    callData:
+      processingPrompt:
+        noValue: true
+    collectInput:
+      noEntryTimeout:
+        lit:
+          seconds: 5
+    dialByExtension:
+      interDigitTimeout:
+        lit:
+          seconds: 6
+    transferToUser:
+      connectTimeout:
+        noValue: true
+    transferToNumber:
+      connectTimeout:
+        noValue: true
+    transferToGroup:
+      connectTimeout:
+        noValue: true
+    transferToFlowSecure:
+      connectTimeout:
+        lit:
+          seconds: 15
+  settingsErrorHandling:
+    errorHandling:
+      disconnect:
+        none: true
+    preHandlingAudio:
+      tts: An error occurred, please try again
+  settingsPrompts:
+    ensureAudioInPrompts: false
+    promptMediaToValidate:
+      - mediaType: audio
+      - mediaType: tts
+  startUpTaskActions:
+    - updateData:
+        name: Update Data
+        statements:
+          - dateTime:
+              variable: Task.StartQueueTime
+              value:
+                exp: GetCurrentDateTimeUtc()
+    - updateData:
+        name: Boolean defaults
+        statements:
+          - boolean:
+              variable: Flow.OfferCallback
+              value:
+                lit: false
+          - boolean:
+              variable: Flow.FlowCallbackScheduleOpen
+              value:
+                lit: false
+          - boolean:
+              variable: Flow.PlayEWT
+              value:
+                lit: false
+          - boolean:
+              variable: Flow.PlayPositionInQueue
+              value:
+                lit: false
+          - boolean:
+              variable: Flow.CallbackRepeat
+              value:
+                lit: false
+          - boolean:
+              variable: Flow.CallbackOffered
+              value:
+                lit: false
+          - boolean:
+              variable: Flow.QueueWaitPromptRepeat
+              value:
+                lit: false
+          - boolean:
+              variable: Flow.QueueWaitPromptPlayed
+              value:
+                lit: false
+          - boolean:
+              variable: Flow.QueueWaitPrompt2Repeat
+              value:
+                lit: false
+          - boolean:
+              variable: Flow.QueueWaitPrompt2Played
+              value:
+                lit: false
+    - getParticipantData:
+        name: Get Participant Data
+        attributes:
+          - attribute:
+              name:
+                lit: CustomerJourney
+              variable: Task.CustomerJourney
+          - attribute:
+              name:
+                lit: Dest_InQueue
+              variable: Task.Dest_InQueue
+          - attribute:
+              name:
+                lit: Language
+              variable: Task.FlowLanguage
+          - attribute:
+              name:
+                lit: TablesDivision
+              variable: Flow.TablesDivision
+          - attribute:
+              name:
+                lit: Voice
+              variable: Flow.Voice
+    - decision:
+        name: Decision
+        condition:
+          exp: Flow.Voice == "None"
+        outputs:
+          "yes":
+            actions:
+              - updateData:
+                  name: Update Data
+                  statements:
+                    - string:
+                        variable: Flow.Prompt_Postfix
+                        value:
+                          exp: "\"\""
+          "no":
+            actions:
+              - updateData:
+                  name: Update Data
+                  statements:
+                    - string:
+                        variable: Flow.Prompt_Postfix
+                        value:
+                          exp: "\"_\" + Flow.Voice"
+    - switch:
+        name: Switch
+        evaluate:
+          firstTrue:
+            default:
+              actions:
+                - setParticipantData:
+                    name: Set Participant Data
+                    attributes:
+                      - attribute:
+                          name:
+                            lit: ERROR_Disconnect
+                          value:
+                            exp: "\"Data Table Switch (In Queue Flow) - Division: \" + Flow.TablesDivision + \" not found\""
+                - disconnect:
+                    name: Disconnect
+            cases:
+              - case:
+                  value:
+                    exp: Flow.TablesDivision == "RJV"
+                  actions:
+                    - dataTableLookup:
+                        name: Data Table Lookup
+                        lookupValue:
+                          exp: Task.Dest_InQueue
+                        dataTable:
+                          RJV_Routing_Queueing:
+                            foundOutputs:
+                              OfferCallback:
+                                var: Flow.OfferCallback
+                              CallbackEwtThreshold:
+                                var: Flow.CallbackEwtThreshold
+                              CallbackScheduleGroup:
+                                var: Flow.CallbackScheduleGroup
+                              QueueMusic:
+                                var: Flow.QueueMusic
+                              QueueStartPrompt:
+                                var: Flow.QueueStartPrompt
+                              QueueStartPrompt2:
+                                var: Flow.QueueStartPrompt2
+                              QueueStartPrompt3:
+                                var: Flow.QueueStartPrompt3
+                              QueueWaitPrompt:
+                                var: Flow.QueueWaitPrompt
+                              QueueWaitPromptThreshold:
+                                var: Flow.QueueWaitPromptThreshold
+                              QueueWaitRepeats:
+                                var: Flow.QueueWaitRepeats
+                              PlayEWT:
+                                var: Flow.PlayEWT
+                              OfferVoiceMail:
+                                var: Flow.OfferVM
+                              PlayPosInQueue:
+                                var: Flow.PlayPositionInQueue
+                              CallbackRepeat:
+                                var: Flow.CallbackRepeat
+                              QueueWaitPromptRepeat:
+                                var: Flow.QueueWaitPromptRepeat
+                              EndOfLoopTreatment:
+                                var: Flow.EndOfLoopTreatment
+                              EndOfLoopTransferNumber:
+                                var: Flow.EndOfLoopTransferNumber
+                              EndOfLoopPrompt:
+                                var: Flow.PromptEndOfLoop
+                              QueueWaitPrompt2:
+                                var: Flow.QueueWaitPrompt2
+                              QueueWaitPrompt2Threshold:
+                                var: Flow.QueueWaitPrompt2Threshold
+                              QueueWaitPrompt2Repeat:
+                                var: Flow.QueueWaitPrompt2Repeat
+                              QueueMusic_Time:
+                                var: Flow.QueueMusic_Time
+                            failureOutputs:
+                              errorType:
+                                noValue: true
+                              errorMessage:
+                                noValue: true
+                        outputs:
+                          found:
+                            actions:
+                              - updateData:
+                                  name: Update Data
+                                  statements:
+                                    - integer:
+                                        variable: Flow.CurrentCBThreshold
+                                        value:
+                                          exp: Flow.CallbackEwtThreshold
+                                    - integer:
+                                        variable: Task.CurrentQueueWaitPromptThreshold
+                                        value:
+                                          exp: Flow.QueueWaitPromptThreshold
+                                    - integer:
+                                        variable: Task.CurrentQueueWaitPrompt2Threshold
+                                        value:
+                                          lit: 0
+                          notFound:
+                            actions:
+                              - setParticipantData:
+                                  name: Set Participant Data
+                                  attributes:
+                                    - attribute:
+                                        name:
+                                          lit: ERROR_Disconnect
+                                        value:
+                                          exp: "\"Data Table RoutingQueueing - Entry not found: \" + Flow.CalledDNIS"
+                              - disconnect:
+                                  name: Disconnect
+                          failure:
+                            actions:
+                              - setParticipantData:
+                                  name: Set Participant Data
+                                  attributes:
+                                    - attribute:
+                                        name:
+                                          lit: ERROR_Disconnect
+                                        value:
+                                          exp: "\"Data Table RoutingQueueing - Failure\""
+                              - disconnect:
+                                  name: Disconnect
+    - decision:
+        name: Decision
+        condition:
+          exp: IsNotSetOrEmpty(Flow.CallbackScheduleGroup)
+        outputs:
+          "yes":
+            actions:
+              - updateData:
+                  name: Update Data
+                  statements:
+                    - boolean:
+                        variable: Flow.FlowCallbackScheduleOpen
+                        value:
+                          lit: true
+          "no":
+            actions:
+              - evaluateScheduleGroup:
+                  name: Evaluate Schedule Group
+                  inServiceSchedules:
+                    noValue: true
+                  evaluate:
+                    now: true
+                  scheduleGroup:
+                    exp: FindScheduleGroup(Flow.CallbackScheduleGroup)
+                  emergencyGroup:
+                    noValue: true
+                  outputs:
+                    open:
+                      actions:
+                        - updateData:
+                            name: Update Data
+                            statements:
+                              - boolean:
+                                  variable: Flow.FlowCallbackScheduleOpen
+                                  value:
+                                    lit: true
+    - decision:
+        name: Decision
+        condition:
+          exp: IsNotSetOrEmpty(Flow.CallbackEwtThreshold) or Flow.CallbackEwtThreshold <=0
+        outputs:
+          "yes":
+            actions:
+              - updateData:
+                  name: Update Data
+                  statements:
+                    - integer:
+                        variable: Flow.CallbackEwtThreshold
+                        value:
+                          lit: 60
+    - decision:
+        name: Decision
+        condition:
+          exp: IsNotSetOrEmpty(Flow.QueueWaitPromptThreshold) or Flow.QueueWaitPromptThreshold <=0
+        outputs:
+          "yes":
+            actions:
+              - updateData:
+                  name: Update Data
+                  statements:
+                    - integer:
+                        variable: Flow.QueueWaitPromptThreshold
+                        value:
+                          lit: 90
+    - decision:
+        name: Decision
+        condition:
+          exp: IsNotSetOrEmpty(Flow.QueueWaitRepeats) or Flow.QueueWaitRepeats <=0
+        outputs:
+          "yes":
+            actions:
+              - updateData:
+                  name: Update Data
+                  statements:
+                    - integer:
+                        variable: Flow.QueueWaitRepeats
+                        value:
+                          lit: 99
+    - decision:
+        name: Decision
+        condition:
+          exp: IsNotSetOrEmpty(Flow.QueueMusic)
+        outputs:
+          "yes":
+            actions:
+              - updateData:
+                  name: Update Data
+                  statements:
+                    - string:
+                        variable: Flow.QueueMusic
+                        value:
+                          lit: MoH_asmallmiracle
+    - decision:
+        name: Decision
+        condition:
+          exp: Flow.PlayEWT
+        outputs:
+          "yes":
+            actions:
+              - decision:
+                  name: Decision
+                  condition:
+                    exp: IsNotSetOrEmpty(Call.EstimatedWaitTime)
+                  outputs:
+                    "yes":
+                      actions:
+                        - callCommonModule:
+                            name: Call Common Module
+                            commonModule:
+                              RJV Customer Journey:
+                                ver_latestPublished:
+                                  inputs:
+                                    Common.CustomerJourneyUpdateString:
+                                      exp: "\"NoEWT\""
+                                    Common.CustomerJourney:
+                                      exp: Task.CustomerJourney
+                                  outputs:
+                                    Common.CustomerJourneyOutput:
+                                      var: Task.CustomerJourney
+                    "no":
+                      actions:
+                        - decision:
+                            name: Decision
+                            condition:
+                              exp: Flow.CallbackEwtThreshold <= 0
+                            outputs:
+                              "yes":
+                                actions:
+                                  - callCommonModule:
+                                      name: Call Common Module
+                                      commonModule:
+                                        RJV Customer Journey:
+                                          ver_latestPublished:
+                                            inputs:
+                                              Common.CustomerJourneyUpdateString:
+                                                exp: "\"NoEWT\""
+                                              Common.CustomerJourney:
+                                                exp: Task.CustomerJourney
+                                            outputs:
+                                              Common.CustomerJourneyOutput:
+                                                var: Task.CustomerJourney
+                              "no":
+                                actions:
+                                  - updateData:
+                                      name: Update Data
+                                      statements:
+                                        - integer:
+                                            variable: Task.EWTvalue
+                                            value:
+                                              exp: Call.EstimatedWaitTime
+                                        - string:
+                                            variable: Task.EWTvalueString
+                                            value:
+                                              exp: ToString(Call.EstimatedWaitTime)
+                                  - switch:
+                                      name: Switch
+                                      evaluate:
+                                        firstTrue:
+                                          default:
+                                            actions:
+                                              - updateData:
+                                                  name: Update Data
+                                                  statements:
+                                                    - string:
+                                                        variable: Task.PlayedEWT
+                                                        value:
+                                                          lit: Not found
+                                          cases:
+                                            - case:
+                                                value:
+                                                  exp: Task.EWTvalue < 60000
+                                                actions:
+                                                  - updateData:
+                                                      name: Update Data
+                                                      statements:
+                                                        - string:
+                                                            variable: Task.PlayedEWT
+                                                            value:
+                                                              lit: None
+                                            - case:
+                                                value:
+                                                  exp: Task.EWTvalue < 120000
+                                                actions:
+                                                  - callCommonModule:
+                                                      name: Call Common Module
+                                                      commonModule:
+                                                        RJV PlayPrompt DirectTable:
+                                                          ver_latestPublished:
+                                                            inputs:
+                                                              Common.FlowLanguage:
+                                                                exp: Task.FlowLanguage
+                                                              Common.Prompt2Search:
+                                                                exp: "\"Global_EWT_Less2Minutes\" + Flow.Prompt_Postfix"
+                                                              Common.TablesDivision:
+                                                                exp: Flow.TablesDivision
+                                                            outputs:
+                                                              Common.NextDestination:
+                                                                noValue: true
+                                                  - updateData:
+                                                      name: Update Data
+                                                      statements:
+                                                        - string:
+                                                            variable: Task.PlayedEWT
+                                                            value:
+                                                              lit: Less 2
+                                            - case:
+                                                value:
+                                                  exp: Task.EWTvalue < 180000
+                                                actions:
+                                                  - callCommonModule:
+                                                      name: Call Common Module
+                                                      commonModule:
+                                                        RJV PlayPrompt DirectTable:
+                                                          ver_latestPublished:
+                                                            inputs:
+                                                              Common.FlowLanguage:
+                                                                exp: Task.FlowLanguage
+                                                              Common.Prompt2Search:
+                                                                exp: "\"Global_EWT_Less3Minutes\" + Flow.Prompt_Postfix"
+                                                              Common.TablesDivision:
+                                                                exp: Flow.TablesDivision
+                                                            outputs:
+                                                              Common.NextDestination:
+                                                                noValue: true
+                                                  - updateData:
+                                                      name: Update Data
+                                                      statements:
+                                                        - string:
+                                                            variable: Task.PlayedEWT
+                                                            value:
+                                                              lit: Less 3
+                                            - case:
+                                                value:
+                                                  exp: Task.EWTvalue < 300000
+                                                actions:
+                                                  - callCommonModule:
+                                                      name: Call Common Module
+                                                      commonModule:
+                                                        RJV PlayPrompt DirectTable:
+                                                          ver_latestPublished:
+                                                            inputs:
+                                                              Common.FlowLanguage:
+                                                                exp: Task.FlowLanguage
+                                                              Common.Prompt2Search:
+                                                                exp: "\"Global_EWT_Less5Minutes\" + Flow.Prompt_Postfix"
+                                                              Common.TablesDivision:
+                                                                exp: Flow.TablesDivision
+                                                            outputs:
+                                                              Common.NextDestination:
+                                                                noValue: true
+                                                  - updateData:
+                                                      name: Update Data
+                                                      statements:
+                                                        - string:
+                                                            variable: Task.PlayedEWT
+                                                            value:
+                                                              lit: Less 5
+                                            - case:
+                                                value:
+                                                  exp: Task.EWTvalue < 600000
+                                                actions:
+                                                  - callCommonModule:
+                                                      name: Call Common Module
+                                                      commonModule:
+                                                        RJV PlayPrompt DirectTable:
+                                                          ver_latestPublished:
+                                                            inputs:
+                                                              Common.FlowLanguage:
+                                                                exp: Task.FlowLanguage
+                                                              Common.Prompt2Search:
+                                                                exp: "\"Global_EWT_Less10Minutes\" + Flow.Prompt_Postfix"
+                                                              Common.TablesDivision:
+                                                                exp: Flow.TablesDivision
+                                                            outputs:
+                                                              Common.NextDestination:
+                                                                noValue: true
+                                                  - updateData:
+                                                      name: Update Data
+                                                      statements:
+                                                        - string:
+                                                            variable: Task.PlayedEWT
+                                                            value:
+                                                              lit: Less 10
+                                            - case:
+                                                value:
+                                                  exp: Task.EWTvalue > 1800000
+                                                actions:
+                                                  - callCommonModule:
+                                                      name: Call Common Module
+                                                      commonModule:
+                                                        RJV PlayPrompt DirectTable:
+                                                          ver_latestPublished:
+                                                            inputs:
+                                                              Common.FlowLanguage:
+                                                                exp: Task.FlowLanguage
+                                                              Common.Prompt2Search:
+                                                                exp: "\"Global_EWT_More30Minutes\" + Flow.Prompt_Postfix"
+                                                              Common.TablesDivision:
+                                                                exp: Flow.TablesDivision
+                                                            outputs:
+                                                              Common.NextDestination:
+                                                                noValue: true
+                                                  - updateData:
+                                                      name: Update Data
+                                                      statements:
+                                                        - string:
+                                                            variable: Task.PlayedEWT
+                                                            value:
+                                                              lit: More 30
+                                            - case:
+                                                value:
+                                                  exp: Task.EWTvalue > 1200000
+                                                actions:
+                                                  - callCommonModule:
+                                                      name: Call Common Module
+                                                      commonModule:
+                                                        RJV PlayPrompt DirectTable:
+                                                          ver_latestPublished:
+                                                            inputs:
+                                                              Common.FlowLanguage:
+                                                                exp: Task.FlowLanguage
+                                                              Common.Prompt2Search:
+                                                                exp: "\"Global_EWT_More20Minutes\" + Flow.Prompt_Postfix"
+                                                              Common.TablesDivision:
+                                                                exp: Flow.TablesDivision
+                                                            outputs:
+                                                              Common.NextDestination:
+                                                                noValue: true
+                                                  - updateData:
+                                                      name: Update Data
+                                                      statements:
+                                                        - string:
+                                                            variable: Task.PlayedEWT
+                                                            value:
+                                                              lit: More 20
+                                            - case:
+                                                value:
+                                                  exp: Task.EWTvalue >= 600000
+                                                actions:
+                                                  - callCommonModule:
+                                                      name: Call Common Module
+                                                      commonModule:
+                                                        RJV PlayPrompt DirectTable:
+                                                          ver_latestPublished:
+                                                            inputs:
+                                                              Common.FlowLanguage:
+                                                                exp: Task.FlowLanguage
+                                                              Common.Prompt2Search:
+                                                                exp: "\"Global_EWT_More10Minutes\" + Flow.Prompt_Postfix"
+                                                              Common.TablesDivision:
+                                                                exp: Flow.TablesDivision
+                                                            outputs:
+                                                              Common.NextDestination:
+                                                                noValue: true
+                                                  - updateData:
+                                                      name: Update Data
+                                                      statements:
+                                                        - string:
+                                                            variable: Task.PlayedEWT
+                                                            value:
+                                                              lit: More 10
+                                  - callCommonModule:
+                                      name: Call Common Module
+                                      commonModule:
+                                        RJV Customer Journey:
+                                          ver_latestPublished:
+                                            inputs:
+                                              Common.CustomerJourneyUpdateString:
+                                                exp: "\"PlayEWT - Calq: \" + Tostring(Task.EWTvalue) + \" Played: \" + Task.PlayedEWT"
+                                              Common.CustomerJourney:
+                                                exp: Task.CustomerJourney
+                                            outputs:
+                                              Common.CustomerJourneyOutput:
+                                                var: Task.CustomerJourney
+          "no":
+            actions:
+              - callCommonModule:
+                  name: Call Common Module
+                  commonModule:
+                    RJV Customer Journey:
+                      ver_latestPublished:
+                        inputs:
+                          Common.CustomerJourneyUpdateString:
+                            exp: "\"EWT_NotActive\""
+                          Common.CustomerJourney:
+                            exp: Task.CustomerJourney
+                        outputs:
+                          Common.CustomerJourneyOutput:
+                            var: Task.CustomerJourney
+    - decision:
+        name: Decision
+        condition:
+          exp: Flow.PlayPositionInQueue
+        outputs:
+          "yes":
+            actions:
+              - switch:
+                  name: Switch
+                  evaluate:
+                    firstTrue:
+                      default:
+                        actions:
+                          - updateData:
+                              name: Update Data
+                              statements:
+                                - string:
+                                    variable: Task.PLayedPPIQ
+                                    value:
+                                      lit: Not found
+                      cases:
+                        - case:
+                            value:
+                              exp: Call.PositionInQueue == 1
+                            actions:
+                              - callCommonModule:
+                                  name: Call Common Module
+                                  commonModule:
+                                    RJV PlayPrompt DirectTable:
+                                      ver_latestPublished:
+                                        inputs:
+                                          Common.FlowLanguage:
+                                            exp: Task.FlowLanguage
+                                          Common.Prompt2Search:
+                                            exp: "\"PPIQ_NoneAhead\" + Flow.Prompt_Postfix"
+                                          Common.TablesDivision:
+                                            exp: Flow.TablesDivision
+                                        outputs:
+                                          Common.NextDestination:
+                                            noValue: true
+                              - updateData:
+                                  name: Update Data
+                                  statements:
+                                    - string:
+                                        variable: Task.PLayedPPIQ
+                                        value:
+                                          lit: 0 Ahead
+                        - case:
+                            value:
+                              exp: Call.PositionInQueue == 2
+                            actions:
+                              - callCommonModule:
+                                  name: Call Common Module
+                                  commonModule:
+                                    RJV PlayPrompt DirectTable:
+                                      ver_latestPublished:
+                                        inputs:
+                                          Common.FlowLanguage:
+                                            exp: Task.FlowLanguage
+                                          Common.Prompt2Search:
+                                            exp: "\"PPIQ_OneAhead\" + Flow.Prompt_Postfix"
+                                          Common.TablesDivision:
+                                            exp: Flow.TablesDivision
+                                        outputs:
+                                          Common.NextDestination:
+                                            noValue: true
+                              - updateData:
+                                  name: Update Data
+                                  statements:
+                                    - string:
+                                        variable: Task.PLayedPPIQ
+                                        value:
+                                          lit: 1 Ahead
+                        - case:
+                            value:
+                              exp: Call.PositionInQueue == 3
+                            actions:
+                              - callCommonModule:
+                                  name: Call Common Module
+                                  commonModule:
+                                    RJV PlayPrompt DirectTable:
+                                      ver_latestPublished:
+                                        inputs:
+                                          Common.FlowLanguage:
+                                            exp: Task.FlowLanguage
+                                          Common.Prompt2Search:
+                                            exp: "\"PPIQ_TwoAhead\" + Flow.Prompt_Postfix"
+                                          Common.TablesDivision:
+                                            exp: Flow.TablesDivision
+                                        outputs:
+                                          Common.NextDestination:
+                                            noValue: true
+                              - updateData:
+                                  name: Update Data
+                                  statements:
+                                    - string:
+                                        variable: Task.PLayedPPIQ
+                                        value:
+                                          lit: 2 Ahead
+                        - case:
+                            value:
+                              exp: Call.PositionInQueue == 4
+                            actions:
+                              - callCommonModule:
+                                  name: Call Common Module
+                                  commonModule:
+                                    RJV PlayPrompt DirectTable:
+                                      ver_latestPublished:
+                                        inputs:
+                                          Common.FlowLanguage:
+                                            exp: Task.FlowLanguage
+                                          Common.Prompt2Search:
+                                            exp: "\"PPIQ_ThreeAhead\" + Flow.Prompt_Postfix"
+                                          Common.TablesDivision:
+                                            exp: Flow.TablesDivision
+                                        outputs:
+                                          Common.NextDestination:
+                                            noValue: true
+                              - updateData:
+                                  name: Update Data
+                                  statements:
+                                    - string:
+                                        variable: Task.PLayedPPIQ
+                                        value:
+                                          lit: 3 Ahead
+                        - case:
+                            value:
+                              exp: Call.PositionInQueue == 5
+                            actions:
+                              - callCommonModule:
+                                  name: Call Common Module
+                                  commonModule:
+                                    RJV PlayPrompt DirectTable:
+                                      ver_latestPublished:
+                                        inputs:
+                                          Common.FlowLanguage:
+                                            exp: Task.FlowLanguage
+                                          Common.Prompt2Search:
+                                            exp: "\"PPIQ_FourAhead\" + Flow.Prompt_Postfix"
+                                          Common.TablesDivision:
+                                            exp: Flow.TablesDivision
+                                        outputs:
+                                          Common.NextDestination:
+                                            noValue: true
+                              - updateData:
+                                  name: Update Data
+                                  statements:
+                                    - string:
+                                        variable: Task.PLayedPPIQ
+                                        value:
+                                          lit: 4 Ahead
+                        - case:
+                            value:
+                              exp: Call.PositionInQueue == 6
+                            actions:
+                              - callCommonModule:
+                                  name: Call Common Module
+                                  commonModule:
+                                    RJV PlayPrompt DirectTable:
+                                      ver_latestPublished:
+                                        inputs:
+                                          Common.FlowLanguage:
+                                            exp: Task.FlowLanguage
+                                          Common.Prompt2Search:
+                                            exp: "\"PPIQ_FiveAhead\" + Flow.Prompt_Postfix"
+                                          Common.TablesDivision:
+                                            exp: Flow.TablesDivision
+                                        outputs:
+                                          Common.NextDestination:
+                                            noValue: true
+                              - updateData:
+                                  name: Update Data
+                                  statements:
+                                    - string:
+                                        variable: Task.PLayedPPIQ
+                                        value:
+                                          lit: 5 Ahead
+                        - case:
+                            value:
+                              exp: Call.PositionInQueue == 7
+                            actions:
+                              - callCommonModule:
+                                  name: Call Common Module
+                                  commonModule:
+                                    RJV PlayPrompt DirectTable:
+                                      ver_latestPublished:
+                                        inputs:
+                                          Common.FlowLanguage:
+                                            exp: Task.FlowLanguage
+                                          Common.Prompt2Search:
+                                            exp: "\"PPIQ_SixAhead\" + Flow.Prompt_Postfix"
+                                          Common.TablesDivision:
+                                            exp: Flow.TablesDivision
+                                        outputs:
+                                          Common.NextDestination:
+                                            noValue: true
+                              - updateData:
+                                  name: Update Data
+                                  statements:
+                                    - string:
+                                        variable: Task.PLayedPPIQ
+                                        value:
+                                          lit: 6 Ahead
+                        - case:
+                            value:
+                              exp: Call.PositionInQueue == 8
+                            actions:
+                              - callCommonModule:
+                                  name: Call Common Module
+                                  commonModule:
+                                    RJV PlayPrompt DirectTable:
+                                      ver_latestPublished:
+                                        inputs:
+                                          Common.FlowLanguage:
+                                            exp: Task.FlowLanguage
+                                          Common.Prompt2Search:
+                                            exp: "\"PPIQ_SevenAhead\" + Flow.Prompt_Postfix"
+                                          Common.TablesDivision:
+                                            exp: Flow.TablesDivision
+                                        outputs:
+                                          Common.NextDestination:
+                                            noValue: true
+                              - updateData:
+                                  name: Update Data
+                                  statements:
+                                    - string:
+                                        variable: Task.PLayedPPIQ
+                                        value:
+                                          lit: 7 Ahead
+                        - case:
+                            value:
+                              exp: Call.PositionInQueue == 9
+                            actions:
+                              - callCommonModule:
+                                  name: Call Common Module
+                                  commonModule:
+                                    RJV PlayPrompt DirectTable:
+                                      ver_latestPublished:
+                                        inputs:
+                                          Common.FlowLanguage:
+                                            exp: Task.FlowLanguage
+                                          Common.Prompt2Search:
+                                            exp: "\"PPIQ_EightAhead\" + Flow.Prompt_Postfix"
+                                          Common.TablesDivision:
+                                            exp: Flow.TablesDivision
+                                        outputs:
+                                          Common.NextDestination:
+                                            noValue: true
+                              - updateData:
+                                  name: Update Data
+                                  statements:
+                                    - string:
+                                        variable: Task.PLayedPPIQ
+                                        value:
+                                          lit: 8 Ahead
+                        - case:
+                            value:
+                              exp: Call.PositionInQueue > 9
+                            actions:
+                              - callCommonModule:
+                                  name: Call Common Module
+                                  commonModule:
+                                    RJV PlayPrompt DirectTable:
+                                      ver_latestPublished:
+                                        inputs:
+                                          Common.FlowLanguage:
+                                            exp: Task.FlowLanguage
+                                          Common.Prompt2Search:
+                                            exp: "\"PPIQ_MoreEightAhead\" + Flow.Prompt_Postfix"
+                                          Common.TablesDivision:
+                                            exp: Flow.TablesDivision
+                                        outputs:
+                                          Common.NextDestination:
+                                            noValue: true
+                              - updateData:
+                                  name: Update Data
+                                  statements:
+                                    - string:
+                                        variable: Task.PLayedPPIQ
+                                        value:
+                                          lit: More 8 Ahead
+              - callCommonModule:
+                  name: Call Common Module
+                  commonModule:
+                    RJV Customer Journey:
+                      ver_latestPublished:
+                        inputs:
+                          Common.CustomerJourneyUpdateString:
+                            exp: "\"PPIQ played: \" + Task.PLayedPPIQ"
+                          Common.CustomerJourney:
+                            exp: Task.CustomerJourney
+                        outputs:
+                          Common.CustomerJourneyOutput:
+                            var: Task.CustomerJourney
+          "no":
+            actions:
+              - callCommonModule:
+                  name: Call Common Module
+                  commonModule:
+                    RJV Customer Journey:
+                      ver_latestPublished:
+                        inputs:
+                          Common.CustomerJourneyUpdateString:
+                            exp: "\"PPIQ_NotActive\""
+                          Common.CustomerJourney:
+                            exp: Task.CustomerJourney
+                        outputs:
+                          Common.CustomerJourneyOutput:
+                            var: Task.CustomerJourney
+    - callCommonModule:
+        name: Call Common Module
+        commonModule:
+          RJV PlayPrompt DirectTable:
+            ver_latestPublished:
+              inputs:
+                Common.FlowLanguage:
+                  exp: Task.FlowLanguage
+                Common.Prompt2Search:
+                  exp: Flow.QueueStartPrompt + Flow.Prompt_Postfix
+                Common.TablesDivision:
+                  exp: Flow.TablesDivision
+              outputs:
+                Common.NextDestination:
+                  noValue: true
+    - callCommonModule:
+        name: Call Common Module
+        commonModule:
+          RJV PlayPrompt DirectTable:
+            ver_latestPublished:
+              inputs:
+                Common.FlowLanguage:
+                  exp: Task.FlowLanguage
+                Common.Prompt2Search:
+                  exp: Flow.QueueStartPrompt2 + Flow.Prompt_Postfix
+                Common.TablesDivision:
+                  exp: Flow.TablesDivision
+              outputs:
+                Common.NextDestination:
+                  noValue: true
+    - callCommonModule:
+        name: Call Common Module
+        commonModule:
+          RJV PlayPrompt DirectTable:
+            ver_latestPublished:
+              inputs:
+                Common.FlowLanguage:
+                  exp: Task.FlowLanguage
+                Common.Prompt2Search:
+                  exp: Flow.QueueStartPrompt3 + Flow.Prompt_Postfix
+                Common.TablesDivision:
+                  exp: Flow.TablesDivision
+              outputs:
+                Common.NextDestination:
+                  noValue: true
+    - loop:
+        name: Loop
+        currentIndex:
+          var: Task.CurrentIndexData
+        loopCount:
+          exp: Flow.QueueWaitRepeats
+        outputs:
+          loop:
+            actions:
+              - holdMusic:
+                  name: MoH
+                  prompt:
+                    exp: FindUserPrompt(Flow.QueueMusic + Flow.Prompt_Postfix)
+                  bargeInEnabled:
+                    lit: false
+                  playStyle:
+                    duration:
+                      exp: MakeDuration(0,0,0,Flow.QueueMusic_Time,0)
+              - updateData:
+                  name: Update Data
+                  statements:
+                    - dateTime:
+                        variable: Task.CurrentTime
+                        value:
+                          exp: GetCurrentDateTimeUtc()
+              - decision:
+                  name: Decision
+                  condition:
+                    exp: DateTimeDiff(Task.CurrentTime,Task.StartQueueTime) >= MakeDuration(0, 0, 0, Flow.CallbackEwtThreshold) and (!Flow.CallbackOffered or Flow.CallbackRepeat)
+                  outputs:
+                    "yes":
+                      actions:
+                        - decision:
+                            name: Callback offer
+                            condition:
+                              exp: Flow.OfferCallback
+                            outputs:
+                              "yes":
+                                actions:
+                                  - decision:
+                                      name: Decision
+                                      condition:
+                                        exp: Flow.FlowCallbackScheduleOpen
+                                      outputs:
+                                        "yes":
+                                          actions:
+                                            - callCommonModule:
+                                                name: Call Common Module
+                                                commonModule:
+                                                  RJV Customer Journey:
+                                                    ver_latestPublished:
+                                                      inputs:
+                                                        Common.CustomerJourneyUpdateString:
+                                                          exp: "\"CallbackOffered\""
+                                                        Common.CustomerJourney:
+                                                          exp: Task.CustomerJourney
+                                                      outputs:
+                                                        Common.CustomerJourneyOutput:
+                                                          var: Task.CustomerJourney
+                                            - callCommonModule:
+                                                name: Call Common Module
+                                                commonModule:
+                                                  RJV Callback Direct Table:
+                                                    ver_latestPublished:
+                                                      inputs:
+                                                        Common.ANI_Input:
+                                                          exp: Call.Ani
+                                                        Common.Prompt_VMYesNo:
+                                                          exp: "\"CallbackOfferMenu\" + Flow.Prompt_Postfix"
+                                                        Common.Prompt_VMOnANI:
+                                                          exp: "\"CallbackOnANI\" + Flow.Prompt_Postfix"
+                                                        Common.VMQueue:
+                                                          exp: Call.CurrentQueue
+                                                        Common.Prompt_VMNewNumber:
+                                                          exp: "\"CallBackNewNumber\" + Flow.Prompt_Postfix"
+                                                        Common.VMGreeting:
+                                                          exp: "\"CallbackGreeting\" + Flow.Prompt_Postfix"
+                                                        Common.Language:
+                                                          noValue: true
+                                                        Common.TTS_Names_Input:
+                                                          noValue: true
+                                                        Common.TTS_Content_Input:
+                                                          noValue: true
+                                                        Common.CB_Confirmation:
+                                                          exp: "\"CallbackConformation\" + Flow.Prompt_Postfix"
+                                                        Common.DTID_Routing_Prompts:
+                                                          noValue: true
+                                                        Common.Prompt2Search:
+                                                          noValue: true
+                                                        Common.FlowLanguage:
+                                                          exp: Task.FlowLanguage
+                                                        Common.Forced:
+                                                          lit: false
+                                                      outputs:
+                                                        Common.VoicemailSet:
+                                                          noValue: true
+                                                        Common.NextDestination:
+                                                          noValue: true
+                                  - updateData:
+                                      name: Update Data
+                                      statements:
+                                        - boolean:
+                                            variable: Flow.CallbackOffered
+                                            value:
+                                              lit: true
+                                  - decision:
+                                      name: Decision
+                                      condition:
+                                        exp: Flow.CallbackRepeat
+                                      outputs:
+                                        "yes":
+                                          actions:
+                                            - updateData:
+                                                name: Update Data
+                                                statements:
+                                                  - integer:
+                                                      variable: Flow.CurrentCBThreshold
+                                                      value:
+                                                        exp: Flow.CurrentCBThreshold + Flow.CallbackEwtThreshold
+                              "no":
+                                actions:
+                                  - decision:
+                                      name: Decision
+                                      condition:
+                                        exp: Flow.OfferVM
+                                      outputs:
+                                        "yes":
+                                          actions:
+                                            - decision:
+                                                name: Decision
+                                                condition:
+                                                  exp: Flow.FlowCallbackScheduleOpen
+                                                outputs:
+                                                  "yes":
+                                                    actions:
+                                                      - callCommonModule:
+                                                          name: Call Common Module
+                                                          commonModule:
+                                                            RJV Customer Journey:
+                                                              ver_latestPublished:
+                                                                inputs:
+                                                                  Common.CustomerJourneyUpdateString:
+                                                                    exp: "\"VoicemailOffered\""
+                                                                  Common.CustomerJourney:
+                                                                    exp: Task.CustomerJourney
+                                                                outputs:
+                                                                  Common.CustomerJourneyOutput:
+                                                                    var: Task.CustomerJourney
+                                                      - callCommonModule:
+                                                          name: Call Common Module
+                                                          commonModule:
+                                                            RJV Voicemail:
+                                                              ver_latestPublished:
+                                                                inputs:
+                                                                  Common.ANI_Input:
+                                                                    exp: Call.Ani
+                                                                  Common.Prompt_VMYesNo:
+                                                                    exp: "\"CallbackOfferMenu\" + Flow.Prompt_Postfix"
+                                                                  Common.Prompt_VMOnANI:
+                                                                    exp: "\"CallbackOnANI\" + Flow.Prompt_Postfix"
+                                                                  Common.VMQueue:
+                                                                    exp: Call.CurrentQueue
+                                                                  Common.Prompt_VMNewNumber:
+                                                                    exp: "\"CallBackNewNumber\" + Flow.Prompt_Postfix"
+                                                                  Common.VMGreeting:
+                                                                    exp: "\"CallbackGreeting\" + Flow.Prompt_Postfix"
+                                                                  Common.Language:
+                                                                    noValue: true
+                                                                  Common.Prompt2Search:
+                                                                    noValue: true
+                                                                  Common.FlowLanguage:
+                                                                    exp: Task.FlowLanguage
+                                                                  Common.Forced:
+                                                                    lit: false
+                                                                outputs:
+                                                                  Common.VoicemailSet:
+                                                                    noValue: true
+                                                                  Common.NextDestination:
+                                                                    noValue: true
+                                                      - updateData:
+                                                          name: Update Data
+                                                          statements:
+                                                            - boolean:
+                                                                variable: Flow.CallbackOffered
+                                                                value:
+                                                                  lit: true
+                                                      - decision:
+                                                          name: Decision
+                                                          condition:
+                                                            exp: Flow.CallbackRepeat
+                                                          outputs:
+                                                            "yes":
+                                                              actions:
+                                                                - updateData:
+                                                                    name: Update Data
+                                                                    statements:
+                                                                      - integer:
+                                                                          variable: Flow.CurrentCBThreshold
+                                                                          value:
+                                                                            exp: Flow.CurrentCBThreshold + Flow.CallbackEwtThreshold
+              - decision:
+                  name: Decision
+                  condition:
+                    exp: DateTimeDiff(Task.CurrentTime,Task.StartQueueTime) >= MakeDuration(0, 0, 0, Flow.QueueWaitPromptThreshold) and (!Flow.QueueWaitPromptPlayed or Flow.QueueWaitPromptRepeat)
+                  outputs:
+                    "yes":
+                      actions:
+                        - decision:
+                            name: Decision
+                            condition:
+                              exp: IsNotSetOrEmpty(Flow.QueueWaitPrompt)
+                            outputs:
+                              "no":
+                                actions:
+                                  - callCommonModule:
+                                      name: Call Common Module
+                                      commonModule:
+                                        RJV PlayPrompt DirectTable:
+                                          ver_latestPublished:
+                                            inputs:
+                                              Common.FlowLanguage:
+                                                exp: Task.FlowLanguage
+                                              Common.Prompt2Search:
+                                                exp: Flow.QueueWaitPrompt + Flow.Prompt_Postfix
+                                              Common.TablesDivision:
+                                                exp: Flow.TablesDivision
+                                            outputs:
+                                              Common.NextDestination:
+                                                noValue: true
+                                  - updateData:
+                                      name: Update Data
+                                      statements:
+                                        - boolean:
+                                            variable: Flow.QueueWaitPromptPlayed
+                                            value:
+                                              lit: true
+                                  - decision:
+                                      name: Decision
+                                      condition:
+                                        exp: Flow.QueueWaitPromptRepeat
+                                      outputs:
+                                        "yes":
+                                          actions:
+                                            - updateData:
+                                                name: Update Data
+                                                statements:
+                                                  - integer:
+                                                      variable: Flow.QueueWaitPromptThreshold
+                                                      value:
+                                                        exp: Task.CurrentQueueWaitPromptThreshold + Flow.QueueWaitPromptThreshold
+              - decision:
+                  name: Decision
+                  condition:
+                    exp: DateTimeDiff(Task.CurrentTime,Task.StartQueueTime) >= MakeDuration(0, 0, 0, Flow.QueueWaitPrompt2Threshold) and (!Flow.QueueWaitPrompt2Played or Flow.QueueWaitPrompt2Repeat)
+                  outputs:
+                    "yes":
+                      actions:
+                        - decision:
+                            name: Decision
+                            condition:
+                              exp: IsNotSetOrEmpty(Flow.QueueWaitPrompt2)
+                            outputs:
+                              "no":
+                                actions:
+                                  - callCommonModule:
+                                      name: Call Common Module
+                                      commonModule:
+                                        RJV PlayPrompt DirectTable:
+                                          ver_latestPublished:
+                                            inputs:
+                                              Common.FlowLanguage:
+                                                exp: Task.FlowLanguage
+                                              Common.Prompt2Search:
+                                                exp: Flow.QueueWaitPrompt2 + Flow.Prompt_Postfix
+                                              Common.TablesDivision:
+                                                exp: Flow.TablesDivision
+                                            outputs:
+                                              Common.NextDestination:
+                                                noValue: true
+                                  - updateData:
+                                      name: Update Data
+                                      statements:
+                                        - boolean:
+                                            variable: Flow.QueueWaitPrompt2Played
+                                            value:
+                                              lit: true
+                                  - decision:
+                                      name: Decision
+                                      condition:
+                                        exp: Flow.QueueWaitPrompt2Repeat
+                                      outputs:
+                                        "yes":
+                                          actions:
+                                            - updateData:
+                                                name: Update Data
+                                                statements:
+                                                  - integer:
+                                                      variable: Flow.QueueWaitPrompt2Threshold
+                                                      value:
+                                                        exp: Task.CurrentQueueWaitPrompt2Threshold + Flow.QueueWaitPrompt2Threshold
+    - switch:
+        name: Switch
+        evaluate:
+          firstTrue:
+            cases:
+              - case:
+                  value:
+                    exp: Flow.EndOfLoopTreatment == "CB"
+                  actions:
+                    - callCommonModule:
+                        name: Call Common Module
+                        commonModule:
+                          RJV PlayPrompt DirectTable:
+                            ver_latestPublished:
+                              inputs:
+                                Common.FlowLanguage:
+                                  exp: Task.FlowLanguage
+                                Common.Prompt2Search:
+                                  exp: Flow.PromptEndOfLoop + Flow.Prompt_Postfix
+                                Common.TablesDivision:
+                                  exp: Flow.TablesDivision
+                              outputs:
+                                Common.NextDestination:
+                                  noValue: true
+                    - callCommonModule:
+                        name: Call Common Module
+                        commonModule:
+                          RJV Customer Journey:
+                            ver_latestPublished:
+                              inputs:
+                                Common.CustomerJourneyUpdateString:
+                                  exp: "\"ForcedCallbackInQueue\""
+                                Common.CustomerJourney:
+                                  exp: Task.CustomerJourney
+                              outputs:
+                                Common.CustomerJourneyOutput:
+                                  var: Task.CustomerJourney
+                    - callCommonModule:
+                        name: Call Common Module
+                        commonModule:
+                          RJV Callback Direct Table:
+                            ver_latestPublished:
+                              inputs:
+                                Common.ANI_Input:
+                                  exp: Call.Ani
+                                Common.Prompt_VMYesNo:
+                                  exp: "\"CallbackOfferMenu\" + Flow.Prompt_Postfix"
+                                Common.Prompt_VMOnANI:
+                                  exp: "\"CallbackOnANI\" + Flow.Prompt_Postfix"
+                                Common.VMQueue:
+                                  exp: Call.CurrentQueue
+                                Common.Prompt_VMNewNumber:
+                                  exp: "\"CallBackNewNumber\" + Flow.Prompt_Postfix"
+                                Common.VMGreeting:
+                                  exp: "\"CallbackGreeting\" + Flow.Prompt_Postfix"
+                                Common.Language:
+                                  noValue: true
+                                Common.TTS_Names_Input:
+                                  noValue: true
+                                Common.TTS_Content_Input:
+                                  noValue: true
+                                Common.CB_Confirmation:
+                                  exp: "\"CallbackConformation\" + Flow.Prompt_Postfix"
+                                Common.DTID_Routing_Prompts:
+                                  noValue: true
+                                Common.Prompt2Search:
+                                  noValue: true
+                                Common.FlowLanguage:
+                                  exp: Task.FlowLanguage
+                                Common.Forced:
+                                  lit: true
+                              outputs:
+                                Common.VoicemailSet:
+                                  noValue: true
+                                Common.NextDestination:
+                                  noValue: true
+              - case:
+                  value:
+                    exp: Flow.EndOfLoopTreatment == "VM"
+                  actions:
+                    - callCommonModule:
+                        name: Call Common Module
+                        commonModule:
+                          RJV PlayPrompt DirectTable:
+                            ver_latestPublished:
+                              inputs:
+                                Common.FlowLanguage:
+                                  exp: Task.FlowLanguage
+                                Common.Prompt2Search:
+                                  exp: Flow.PromptEndOfLoop + Flow.Prompt_Postfix
+                                Common.TablesDivision:
+                                  exp: Flow.TablesDivision
+                              outputs:
+                                Common.NextDestination:
+                                  noValue: true
+                    - callCommonModule:
+                        name: Call Common Module
+                        commonModule:
+                          RJV Customer Journey:
+                            ver_latestPublished:
+                              inputs:
+                                Common.CustomerJourneyUpdateString:
+                                  exp: "\"ForcedVoicemailInQueue\""
+                                Common.CustomerJourney:
+                                  exp: Task.CustomerJourney
+                              outputs:
+                                Common.CustomerJourneyOutput:
+                                  var: Task.CustomerJourney
+                    - callCommonModule:
+                        name: Call Common Module
+                        commonModule:
+                          RJV Voicemail:
+                            ver_latestPublished:
+                              inputs:
+                                Common.ANI_Input:
+                                  exp: Call.Ani
+                                Common.Prompt_VMYesNo:
+                                  exp: "\"CallbackOfferMenu\" + Flow.Prompt_Postfix"
+                                Common.Prompt_VMOnANI:
+                                  exp: "\"CallbackOnANI\" + Flow.Prompt_Postfix"
+                                Common.VMQueue:
+                                  exp: Call.CurrentQueue
+                                Common.Prompt_VMNewNumber:
+                                  exp: "\"CallBackNewNumber\" + Flow.Prompt_Postfix"
+                                Common.VMGreeting:
+                                  exp: "\"CallbackGreeting\" + Flow.Prompt_Postfix"
+                                Common.Language:
+                                  noValue: true
+                                Common.Prompt2Search:
+                                  noValue: true
+                                Common.FlowLanguage:
+                                  exp: Task.FlowLanguage
+                                Common.Forced:
+                                  lit: true
+                              outputs:
+                                Common.VoicemailSet:
+                                  noValue: true
+                                Common.NextDestination:
+                                  noValue: true
+              - case:
+                  value:
+                    exp: Flow.EndOfLoopTreatment == "Disconnect"
+                  actions:
+                    - callCommonModule:
+                        name: Call Common Module
+                        commonModule:
+                          RJV PlayPrompt DirectTable:
+                            ver_latestPublished:
+                              inputs:
+                                Common.FlowLanguage:
+                                  exp: Task.FlowLanguage
+                                Common.Prompt2Search:
+                                  exp: Flow.PromptEndOfLoop + Flow.Prompt_Postfix
+                                Common.TablesDivision:
+                                  exp: Flow.TablesDivision
+                              outputs:
+                                Common.NextDestination:
+                                  noValue: true
+                    - callCommonModule:
+                        name: Call Common Module
+                        commonModule:
+                          RJV Customer Journey:
+                            ver_latestPublished:
+                              inputs:
+                                Common.CustomerJourneyUpdateString:
+                                  exp: "\"ForcedDisconnectInQueue\""
+                                Common.CustomerJourney:
+                                  exp: Task.CustomerJourney
+                              outputs:
+                                Common.CustomerJourneyOutput:
+                                  var: Task.CustomerJourney
+                    - disconnect:
+                        name: Disconnect
+              - case:
+                  value:
+                    exp: Flow.EndOfLoopTreatment == "Transfer"
+                  actions:
+                    - callCommonModule:
+                        name: Call Common Module
+                        commonModule:
+                          RJV PlayPrompt DirectTable:
+                            ver_latestPublished:
+                              inputs:
+                                Common.FlowLanguage:
+                                  exp: Task.FlowLanguage
+                                Common.Prompt2Search:
+                                  exp: Flow.PromptEndOfLoop + Flow.Prompt_Postfix
+                                Common.TablesDivision:
+                                  exp: Flow.TablesDivision
+                              outputs:
+                                Common.NextDestination:
+                                  noValue: true
+                    - callCommonModule:
+                        name: Call Common Module
+                        commonModule:
+                          RJV Customer Journey:
+                            ver_latestPublished:
+                              inputs:
+                                Common.CustomerJourneyUpdateString:
+                                  exp: "\"ForcedTransferInQueue\""
+                                Common.CustomerJourney:
+                                  exp: Task.CustomerJourney
+                              outputs:
+                                Common.CustomerJourneyOutput:
+                                  var: Task.CustomerJourney
+                    - transferToNumber:
+                        name: Transfer to Number
+                        targetNumber:
+                          exp: Flow.EndOfLoopTransferNumber
+                        preTransferAudio:
+                          exp: AudioPlaybackOptions(ToAudioBlank(100), true)
+                        failureTransferAudio:
+                          exp: AudioPlaybackOptions(ToAudioBlank(100), true)
+                        releaseLinkTransfer:
+                          lit: false
+                        connectTimeout:
+                          noValue: true
+                        failureOutputs:
+                          errorType:
+                            noValue: true
+                          errorMessage:
+                            noValue: true
+                        outputs:
+                          failure:
+                            actions:
+                              - setParticipantData:
+                                  name: Set Participant Data
+                                  attributes:
+                                    - attribute:
+                                        name:
+                                          lit: ERROR_Disconnect
+                                        value:
+                                          exp: "\"End of loop Transfer - Failure\""
+  startUpTaskVariables:
+    - integerVariable:
+        name: Task.CurrentIndexData
+        initialValue:
+          noValue: true
+    - integerVariable:
+        name: Task.CurrentQueueWaitPrompt2Threshold
+        initialValue:
+          noValue: true
+    - integerVariable:
+        name: Task.CurrentQueueWaitPromptThreshold
+        initialValue:
+          noValue: true
+    - dateTimeVariable:
+        name: Task.CurrentTime
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Task.CustomerJourney
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Task.Dest_InQueue
+        initialValue:
+          noValue: true
+    - integerVariable:
+        name: Task.EWTvalue
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Task.EWTvalueString
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Task.FlowLanguage
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Task.PlayedEWT
+        initialValue:
+          noValue: true
+    - stringVariable:
+        name: Task.PLayedPPIQ
+        initialValue:
+          noValue: true
+    - dateTimeVariable:
+        name: Task.StartQueueTime
+        initialValue:
+          noValue: true

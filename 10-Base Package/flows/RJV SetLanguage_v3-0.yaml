@@ -1,0 +1,186 @@
+commonModule:
+  name: RJV SetLanguage
+  division: "{{var_division}}"
+  supportedLanguages:
+    de-de:
+      none: true
+    en-gb:
+      none: true
+    en-us:
+      none: true
+    fr-fr:
+      none: true
+    nl-nl:
+      none: true
+  variables:
+    - stringVariable:
+        name: Common.LanguageInput
+        initialValue:
+          noValue: true
+        isInput: true
+        isOutput: false
+    - stringVariable:
+        name: Common.LanguageSkill
+        initialValue:
+          noValue: true
+        isInput: false
+        isOutput: true
+    - stringVariable:
+        name: Common.StockCountry
+        initialValue:
+          noValue: true
+        isInput: false
+        isOutput: true
+    - stringVariable:
+        name: Common.WhisperLanguage
+        initialValue:
+          noValue: true
+        isInput: false
+        isOutput: true
+  settingsCommonModule:
+    compatibleFlowTypes:
+      - flowType: inboundcall
+      - flowType: inqueuecall
+  settingsActionDefaults:
+    playAudioOnSilence:
+      timeout:
+        lit:
+          seconds: 40
+    detectSilence:
+      timeout:
+        lit:
+          seconds: 40
+    callData:
+      processingPrompt:
+        noValue: true
+    callDataSecure:
+      processingPrompt:
+        noValue: true
+    collectInput:
+      noEntryTimeout:
+        lit:
+          seconds: 5
+    dialByExtension:
+      interDigitTimeout:
+        lit:
+          seconds: 6
+    transferToUser:
+      connectTimeout:
+        noValue: true
+    transferToNumber:
+      connectTimeout:
+        noValue: true
+    transferToGroup:
+      connectTimeout:
+        noValue: true
+    transferToFlowSecure:
+      connectTimeout:
+        lit:
+          seconds: 15
+  settingsPrompts:
+    ensureAudioInPrompts: false
+    promptMediaToValidate:
+      - mediaType: audio
+      - mediaType: tts
+  startUpTaskActions:
+    - switch:
+        name: Switch
+        evaluate:
+          firstTrue:
+            default:
+              actions:
+                - setLanguage:
+                    name: Set Language
+                    languageValue:
+                      lit: en-us
+                    language: en-us
+                - updateData:
+                    name: Update Data
+                    statements:
+                      - string:
+                          variable: Common.WhisperLanguage
+                          value:
+                            lit: English
+            cases:
+              - case:
+                  value:
+                    exp: Common.LanguageInput == "nl-nl"
+                  actions:
+                    - setLanguage:
+                        name: Set Language
+                        languageValue:
+                          lit: nl-nl
+                        language: nl-nl
+                    - updateData:
+                        name: Update Data
+                        statements:
+                          - string:
+                              variable: Common.WhisperLanguage
+                              value:
+                                lit: Nederlands
+              - case:
+                  value:
+                    exp: Common.LanguageInput == "fr-fr"
+                  actions:
+                    - setLanguage:
+                        name: Set Language
+                        languageValue:
+                          lit: fr-fr
+                        language: fr-fr
+                    - updateData:
+                        name: Update Data
+                        statements:
+                          - string:
+                              variable: Common.WhisperLanguage
+                              value:
+                                lit: Français
+              - case:
+                  value:
+                    exp: Common.LanguageInput == "en-gb"
+                  actions:
+                    - setLanguage:
+                        name: Set Language
+                        languageValue:
+                          lit: en-gb
+                        language: en-gb
+                    - updateData:
+                        name: Update Data
+                        statements:
+                          - string:
+                              variable: Common.WhisperLanguage
+                              value:
+                                lit: English
+              - case:
+                  value:
+                    exp: Common.LanguageInput == "de-de"
+                  actions:
+                    - setLanguage:
+                        name: Set Language
+                        languageValue:
+                          lit: de-de
+                        language: de-de
+                    - updateData:
+                        name: Update Data
+                        statements:
+                          - string:
+                              variable: Common.WhisperLanguage
+                              value:
+                                lit: Deutsch
+              - case:
+                  value:
+                    exp: Common.LanguageInput == "en-us"
+                  actions:
+                    - setLanguage:
+                        name: Set Language
+                        languageValue:
+                          lit: en-us
+                        language: en-us
+                    - updateData:
+                        name: Update Data
+                        statements:
+                          - string:
+                              variable: Common.WhisperLanguage
+                              value:
+                                lit: English
+    - endTask:
+        name: Exit Common Module

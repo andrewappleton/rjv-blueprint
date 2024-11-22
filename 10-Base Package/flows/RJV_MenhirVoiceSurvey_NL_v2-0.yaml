@@ -1,0 +1,345 @@
+voiceSurvey:
+  name: RJV_MenhirVoiceSurvey_NL
+  division: "{{var_division}}"
+  startUpRef: "/voiceSurvey/bots/bot[Survey Bot_10]"
+  surveyForm:
+    name: RJV Menhir Voice Survey NL
+  defaultLanguage: nl-nl
+  supportedLanguages:
+    nl-nl:
+      textToSpeech:
+        Genesys Enhanced TTS:
+          voice: nl-NL-ColetteNeural
+  settingsActionDefaults:
+    askForBoolean:
+      voiceEndOfInputTimeout:
+        lit:
+          seconds: 1
+    askForSlot:
+      voiceEndOfInputTimeout:
+        lit:
+          seconds: 1
+    askSurveyQuestion:
+      voiceEndOfInputTimeout:
+        lit:
+          seconds: 1
+    loopAnythingElse:
+      voiceEndOfInputTimeout:
+        lit:
+          seconds: 1
+  settingsErrorHandling:
+    errorHandling:
+      disconnect:
+        none: true
+    errorEventHandover:
+      exp: "MakeCommunication(\n  \"Sorry, er is een fout opgetreden. Tot ziens.\")"
+    recognitionFailureEventHandover:
+      exp: "MakeCommunication(\n  \"Sorry, ik kan u moeilijk verstaan. Tot ziens.\")"
+    recognitionFailureEventHandling:
+      disconnect:
+        none: true
+  settingsPrompts:
+    ensureAudioInPrompts: false
+    promptMediaToValidate:
+      - mediaType: audio
+      - mediaType: tts
+  settingsSpeechRec:
+    suppressRecording: false
+  tasks:
+    - task:
+        name: Intro
+        refId: Intro_11
+        actions:
+          - askSurveyQuestion:
+              name: Question 1
+              surveyQuestion:
+                RJV Menhir Voice Survey NL:
+                  lit:
+                    text: Was de medewerker vriendelijk
+              question:
+                exp: "MakeCommunication(\n  \"Was de medewerker vriendelijk\")"
+              answer:
+                exp: "MakeCommunication(\n  \"Druk op 1 voor 'Ja'.  Druk op 2 voor 'Nee'.\")"
+              noInput:
+                exp: "MakeCommunication(\n  \"Beantwoord alstublieft de vraag.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"Ik heb u niet begrepen.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - endTask:
+              name: Done - Intro
+              outputPath:
+                name: default
+    - task:
+        name: Gesprek
+        refId: Gesprek_15
+        actions:
+          - askSurveyQuestion:
+              name: Question 1
+              surveyQuestion:
+                RJV Menhir Voice Survey NL:
+                  lit:
+                    text: Is uw onderwerp naar tevredenheid opgelost
+              question:
+                exp: "MakeCommunication(\n  \"Is uw onderwerp naar tevredenheid opgelost\")"
+              answer:
+                exp: "MakeCommunication(\n  \"Druk op 1 voor 'Ja'.  Druk op 2 voor 'Nee'.\")"
+              noInput:
+                exp: "MakeCommunication(\n  \"Beantwoord alstublieft de vraag.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"Ik heb u niet begrepen.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - askSurveyQuestion:
+              name: Question 2
+              surveyQuestion:
+                RJV Menhir Voice Survey NL:
+                  lit:
+                    text: Hoe tevreden bent u over de oplossing op een schaal van 1 tot 5? 1 Is niet tevreden en 5 heel erg tevreden.
+              question:
+                exp: "MakeCommunication(\n  \"Hoe tevreden bent u over de oplossing op een schaal van 1 tot 5? 1 Is niet tevreden en 5 heel erg tevreden.\")"
+              answer:
+                exp: "MakeCommunication(\n  \"Druk op 1 voor '1'.  Druk op 2 voor '2'.  Druk op 3 voor '3'.  Druk op 4 voor '4'.  Druk op 5 voor '5'.\")"
+              noInput:
+                exp: "MakeCommunication(\n  \"Beantwoord alstublieft de vraag.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"Ik heb u niet begrepen.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - endTask:
+              name: Done - Gesprek
+              outputPath:
+                name: default
+    - task:
+        name: Afsluiting
+        refId: Afsluiting_20
+        actions:
+          - askSurveyQuestion:
+              name: Question 1
+              surveyQuestion:
+                RJV Menhir Voice Survey NL:
+                  lit:
+                    text: Sloot de medewerker vriendelijk af?
+              question:
+                exp: "MakeCommunication(\n  \"Sloot de medewerker vriendelijk af?\")"
+              answer:
+                exp: "MakeCommunication(\n  \"Druk op 1 voor 'Ja'.  Druk op 2 voor 'Nee'.\")"
+              noInput:
+                exp: "MakeCommunication(\n  \"Beantwoord alstublieft de vraag.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"Ik heb u niet begrepen.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - askSurveyQuestion:
+              name: Question 2
+              surveyQuestion:
+                RJV Menhir Voice Survey NL:
+                  lit:
+                    text: Heeft u nog aan of opmerkingen over het gesprek?
+              question:
+                exp: "MakeCommunication(\n  \"Heeft u nog aan of opmerkingen over het gesprek?\")"
+              noInput:
+                exp: "MakeCommunication(\n  \"Beantwoord alstublieft de vraag.\")"
+              noMatch:
+                exp: "MakeCommunication(\n  \"Ik heb u niet begrepen.\")"
+              voiceEndOfInputTimeout:
+                noValue: true
+          - endTask:
+              name: Done - Afsluiting
+              outputPath:
+                name: default
+  settingsVoiceSurvey:
+    surveyQuestions:
+      - surveyQuestion:
+          text: Was de medewerker vriendelijk
+          answerOptions:
+            lit:
+              - lit:
+                  dtmf:
+                    lit: "1"
+                  text:
+                    lit: Ja
+              - lit:
+                  dtmf:
+                    lit: "2"
+                  text:
+                    lit: Nee
+      - surveyQuestion:
+          text: Is uw onderwerp naar tevredenheid opgelost
+          answerOptions:
+            lit:
+              - lit:
+                  dtmf:
+                    lit: "1"
+                  text:
+                    lit: Ja
+              - lit:
+                  dtmf:
+                    lit: "2"
+                  text:
+                    lit: Nee
+      - surveyQuestion:
+          text: Hoe tevreden bent u over de oplossing op een schaal van 1 tot 5? 1 Is niet tevreden en 5 heel erg tevreden.
+          answerOptions:
+            lit:
+              - lit:
+                  dtmf:
+                    lit: "1"
+                  text:
+                    lit: "1"
+              - lit:
+                  dtmf:
+                    lit: "2"
+                  text:
+                    lit: "2"
+              - lit:
+                  dtmf:
+                    lit: "3"
+                  text:
+                    lit: "3"
+              - lit:
+                  dtmf:
+                    lit: "4"
+                  text:
+                    lit: "4"
+              - lit:
+                  dtmf:
+                    lit: "5"
+                  text:
+                    lit: "5"
+      - surveyQuestion:
+          text: Sloot de medewerker vriendelijk af?
+          answerOptions:
+            lit:
+              - lit:
+                  dtmf:
+                    lit: "1"
+                  text:
+                    lit: Ja
+              - lit:
+                  dtmf:
+                    lit: "2"
+                  text:
+                    lit: Nee
+  settingsUserInput:
+    enableBargeIn:
+      lit: true
+    noMatchesMax:
+      lit: 3
+    noInputsMax:
+      lit: 3
+    noInputsTimeout:
+      lit:
+        seconds: 7
+    speechToTextSpeechDetectionSensitivity:
+      noValue: true
+    speechToTextMaxSpeechTimeout:
+      noValue: true
+    interDigitTimeout:
+      lit:
+        seconds: 3
+    dtmfTerminatingCharacter:
+      lit: "#"
+    confirmationRejectionsMax:
+      lit: 3
+    noMatchApology:
+      exp: "MakeCommunication(\n  \"Excuses.\")"
+    noInputApology:
+      exp: "MakeCommunication(\n  \"Ik heb u niet verstaan.\")"
+    noToConfirmationApology:
+      exp: "MakeCommunication(\n  \"Mijn fout.\")"
+    confirmationNoMatchApology:
+      exp: "MakeCommunication(\n  \"Zeg ja of nee.\")"
+    confirmationNoInputApology:
+      exp: "MakeCommunication(\n  \"Ik heb u niet verstaan. Zeg ja of nee.\")"
+  bots:
+    - bot:
+        name: Survey Bot
+        refId: Survey Bot_10
+        actions:
+          - callTask:
+              name: Ask Question Group 1
+              targetTaskRef: "/voiceSurvey/tasks/task[Intro_11]"
+          - callTask:
+              name: Ask Question Group 2
+              targetTaskRef: "/voiceSurvey/tasks/task[Gesprek_15]"
+          - callTask:
+              name: Ask Question Group 3
+              targetTaskRef: "/voiceSurvey/tasks/task[Afsluiting_20]"
+          - disconnect:
+              name: Disconnect
+  settingsNaturalLanguageUnderstanding:
+    nluDomainVersion:
+      intents: []
+      entities:
+        - name: Group1_Question1
+          type: Group1_Question1_Type
+        - name: Group2_Question1
+          type: Group2_Question1_Type
+        - name: Group2_Question2
+          type: Group2_Question2_Type
+        - name: Group3_Question1
+          type: Group3_Question1_Type
+        - name: Group3_Question2
+          type: "builtin:any"
+      entityTypes:
+        - name: Group1_Question1_Type
+          description: The description of the Entity Type "Group1_Question1_Type"
+          mechanism:
+            type: List
+            restricted: true
+            items:
+              - value: Ja
+                synonyms:
+                  - "1"
+              - value: Nee
+                synonyms:
+                  - "2"
+        - name: Group2_Question1_Type
+          description: The description of the Entity Type "Group2_Question1_Type"
+          mechanism:
+            type: List
+            restricted: true
+            items:
+              - value: Ja
+                synonyms:
+                  - "1"
+              - value: Nee
+                synonyms:
+                  - "2"
+        - name: Group2_Question2_Type
+          description: The description of the Entity Type "Group2_Question2_Type"
+          mechanism:
+            type: List
+            restricted: true
+            items:
+              - value: "1"
+                synonyms:
+                  - "1"
+              - value: "2"
+                synonyms:
+                  - "2"
+              - value: "3"
+                synonyms:
+                  - "3"
+              - value: "4"
+                synonyms:
+                  - "4"
+              - value: "5"
+                synonyms:
+                  - "5"
+        - name: Group3_Question1_Type
+          description: The description of the Entity Type "Group3_Question1_Type"
+          mechanism:
+            type: List
+            restricted: true
+            items:
+              - value: Ja
+                synonyms:
+                  - "1"
+              - value: Nee
+                synonyms:
+                  - "2"
+      language: nl-nl
+      languageVersions: {}
+    mutedUtterances: []

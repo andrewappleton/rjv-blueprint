@@ -1,0 +1,356 @@
+commonModule:
+  name: RJV PlayPrompt DirectTable
+  division: "{{var_division}}"
+  supportedLanguages:
+    de-de:
+      none: true
+    en-gb:
+      none: true
+    en-us:
+      none: true
+    fr-fr:
+      none: true
+    nl-nl:
+      none: true
+  variables:
+    - stringVariable:
+        name: Common.FlowLanguage
+        initialValue:
+          noValue: true
+        isInput: true
+        isOutput: false
+    - stringVariable:
+        name: Common.NextDestination
+        initialValue:
+          noValue: true
+        isInput: false
+        isOutput: true
+    - stringVariable:
+        name: Common.Prompt2Search
+        initialValue:
+          noValue: true
+        isInput: true
+        isOutput: false
+    - stringVariable:
+        name: Common.PromptName
+        initialValue:
+          noValue: true
+        isInput: false
+        isOutput: false
+    - stringVariable:
+        name: Common.RapEntry
+        initialValue:
+          noValue: true
+        isInput: false
+        isOutput: false
+    - stringVariable:
+        name: Common.TablesDivision
+        initialValue:
+          noValue: true
+        isInput: true
+        isOutput: false
+    - stringVariable:
+        name: Common.TTS_de_de
+        initialValue:
+          noValue: true
+        isInput: false
+        isOutput: false
+    - stringVariable:
+        name: Common.TTS_en_gb
+        initialValue:
+          noValue: true
+        isInput: false
+        isOutput: false
+    - stringVariable:
+        name: Common.TTS_en_us
+        initialValue:
+          noValue: true
+        isInput: false
+        isOutput: false
+    - stringVariable:
+        name: Common.TTS_fr_fr
+        initialValue:
+          noValue: true
+        isInput: false
+        isOutput: false
+    - stringVariable:
+        name: Common.TTS_nl_nl
+        initialValue:
+          noValue: true
+        isInput: false
+        isOutput: false
+  settingsCommonModule:
+    compatibleFlowTypes:
+      - flowType: inboundcall
+      - flowType: inqueuecall
+  settingsActionDefaults:
+    playAudioOnSilence:
+      timeout:
+        lit:
+          seconds: 40
+    detectSilence:
+      timeout:
+        lit:
+          seconds: 40
+    callData:
+      processingPrompt:
+        noValue: true
+    callDataSecure:
+      processingPrompt:
+        noValue: true
+    collectInput:
+      noEntryTimeout:
+        lit:
+          seconds: 5
+    dialByExtension:
+      interDigitTimeout:
+        lit:
+          seconds: 6
+    transferToUser:
+      connectTimeout:
+        noValue: true
+    transferToNumber:
+      connectTimeout:
+        noValue: true
+    transferToGroup:
+      connectTimeout:
+        noValue: true
+    transferToFlowSecure:
+      connectTimeout:
+        lit:
+          seconds: 15
+  settingsPrompts:
+    ensureAudioInPrompts: false
+    promptMediaToValidate:
+      - mediaType: audio
+      - mediaType: tts
+  startUpTaskActions:
+    - decision:
+        name: Decision
+        condition:
+          exp: IsNotSetOrEmpty(Common.Prompt2Search) or Left(Trim(Common.Prompt2Search),1) == "_"
+        outputs:
+          "no":
+            actions:
+              - switch:
+                  name: Switch
+                  evaluate:
+                    firstTrue:
+                      default:
+                        actions:
+                          - setParticipantData:
+                              name: Set Participant Data
+                              attributes:
+                                - attribute:
+                                    name:
+                                      lit: ERROR_Disconnect
+                                    value:
+                                      exp: "\"Data Table Switch Task (PlayPrompt CM) - Division: \" + Common.TablesDivision + \" not found\""
+                          - disconnect:
+                              name: Disconnect
+                      cases:
+                        - case:
+                            value:
+                              exp: Common.TablesDivision == "RJV"
+                            actions:
+                              - dataTableLookup:
+                                  name: Data Table Lookup
+                                  lookupValue:
+                                    exp: Common.Prompt2Search
+                                  dataTable:
+                                    RJV_Routing_Prompts:
+                                      foundOutputs:
+                                        Rap_Entry:
+                                          var: Common.RapEntry
+                                        NextDestination:
+                                          var: Common.NextDestination
+                                        TTS_nl-nl:
+                                          var: Common.TTS_nl_nl
+                                        TTS_fr-fr:
+                                          var: Common.TTS_fr_fr
+                                        TTS_en-gb:
+                                          var: Common.TTS_en_gb
+                                        PromptName:
+                                          var: Common.PromptName
+                                        TTS_de-de:
+                                          var: Common.TTS_de_de
+                                        TTS_en-us:
+                                          var: Common.TTS_en_us
+                                      failureOutputs:
+                                        errorType:
+                                          noValue: true
+                                        errorMessage:
+                                          noValue: true
+                                  outputs:
+                                    notFound:
+                                      actions:
+                                        - setParticipantData:
+                                            name: Set Participant Data
+                                            attributes:
+                                              - attribute:
+                                                  name:
+                                                    lit: ERROR_Prompts
+                                                  value:
+                                                    exp: "\"Data Table RoutingPrompts - Entry not found: \" + Common.Prompt2Search"
+                                    failure:
+                                      actions:
+                                        - setParticipantData:
+                                            name: Set Participant Data
+                                            attributes:
+                                              - attribute:
+                                                  name:
+                                                    lit: ERROR_Disconnect
+                                                  value:
+                                                    exp: "\"Data Table RoutingPrompts - Failure\""
+              - switch:
+                  name: Switch
+                  evaluate:
+                    firstTrue:
+                      cases:
+                        - case:
+                            value:
+                              exp: Common.FlowLanguage == "nl-nl"
+                            actions:
+                              - decision:
+                                  name: Decision
+                                  condition:
+                                    exp: IsNotSetOrEmpty(Common.TTS_nl_nl)
+                                  outputs:
+                                    "yes":
+                                      actions:
+                                        - playAudio:
+                                            name: Play Prompt
+                                            audio:
+                                              exp: AudioPlaybackOptions(ToAudio(FindUserPrompt(Common.Prompt2Search)), true)
+                                    "no":
+                                      actions:
+                                        - updateData:
+                                            name: Update Data
+                                            statements:
+                                              - string:
+                                                  variable: Task.TTS2Play
+                                                  value:
+                                                    exp: Common.TTS_nl_nl
+                                        - playAudio:
+                                            name: Play TTS
+                                            audio:
+                                              exp: AudioPlaybackOptions(ToAudioTTS(Task.TTS2Play), true)
+                        - case:
+                            value:
+                              exp: Common.FlowLanguage == "fr-fr"
+                            actions:
+                              - decision:
+                                  name: Decision
+                                  condition:
+                                    exp: IsNotSetOrEmpty(Common.TTS_fr_fr)
+                                  outputs:
+                                    "yes":
+                                      actions:
+                                        - playAudio:
+                                            name: Play Prompt
+                                            audio:
+                                              exp: AudioPlaybackOptions(ToAudio(FindUserPrompt(Common.Prompt2Search)), true)
+                                    "no":
+                                      actions:
+                                        - updateData:
+                                            name: Update Data
+                                            statements:
+                                              - string:
+                                                  variable: Task.TTS2Play
+                                                  value:
+                                                    exp: Common.TTS_fr_fr
+                                        - playAudio:
+                                            name: Play TTS
+                                            audio:
+                                              exp: AudioPlaybackOptions(ToAudioTTS(Task.TTS2Play), true)
+                        - case:
+                            value:
+                              exp: Common.FlowLanguage == "de-de"
+                            actions:
+                              - decision:
+                                  name: Decision
+                                  condition:
+                                    exp: IsNotSetOrEmpty(Common.TTS_de_de)
+                                  outputs:
+                                    "yes":
+                                      actions:
+                                        - playAudio:
+                                            name: Play Prompt
+                                            audio:
+                                              exp: AudioPlaybackOptions(ToAudio(FindUserPrompt(Common.Prompt2Search)), true)
+                                    "no":
+                                      actions:
+                                        - updateData:
+                                            name: Update Data
+                                            statements:
+                                              - string:
+                                                  variable: Task.TTS2Play
+                                                  value:
+                                                    exp: Common.TTS_de_de
+                                        - playAudio:
+                                            name: Play TTS
+                                            audio:
+                                              exp: AudioPlaybackOptions(ToAudioTTS(Task.TTS2Play), true)
+                        - case:
+                            value:
+                              exp: Common.FlowLanguage == "en-gb"
+                            actions:
+                              - decision:
+                                  name: Decision
+                                  condition:
+                                    exp: IsNotSetOrEmpty(Common.TTS_en_gb)
+                                  outputs:
+                                    "yes":
+                                      actions:
+                                        - playAudio:
+                                            name: Play Prompt
+                                            audio:
+                                              exp: AudioPlaybackOptions(ToAudio(FindUserPrompt(Common.Prompt2Search)), true)
+                                    "no":
+                                      actions:
+                                        - updateData:
+                                            name: Update Data
+                                            statements:
+                                              - string:
+                                                  variable: Task.TTS2Play
+                                                  value:
+                                                    exp: Common.TTS_en_gb
+                                        - playAudio:
+                                            name: Play TTS
+                                            audio:
+                                              exp: AudioPlaybackOptions(ToAudioTTS(Task.TTS2Play), true)
+                        - case:
+                            value:
+                              exp: Common.FlowLanguage == "en-us"
+                            actions:
+                              - decision:
+                                  name: Decision
+                                  condition:
+                                    exp: IsNotSetOrEmpty(Common.TTS_en_us)
+                                  outputs:
+                                    "yes":
+                                      actions:
+                                        - playAudio:
+                                            name: Play Prompt
+                                            audio:
+                                              exp: AudioPlaybackOptions(ToAudio(FindUserPrompt(Common.Prompt2Search)), true)
+                                    "no":
+                                      actions:
+                                        - updateData:
+                                            name: Update Data
+                                            statements:
+                                              - string:
+                                                  variable: Task.TTS2Play
+                                                  value:
+                                                    exp: Common.TTS_en_us
+                                        - playAudio:
+                                            name: Play TTS
+                                            audio:
+                                              exp: AudioPlaybackOptions(ToAudioTTS(Task.TTS2Play), true)
+    - endTask:
+        name: Algemene module afsluiten
+  startUpTaskVariables:
+    - stringVariable:
+        name: Task.TTS2Play
+        initialValue:
+          noValue: true
