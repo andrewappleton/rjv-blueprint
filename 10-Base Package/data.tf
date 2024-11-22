@@ -7,3 +7,11 @@ data "genesyscloud_auth_division" "ref_division" {
 data "genesyscloud_auth_division" "ref_home" {
   name = "Home"
 }
+
+data "genesyscloud_routing_email_domain" "ref_email_domain" {
+  name = "${var.EMAIL_DOMAIN}"
+}
+
+data "genesyscloud_user" "ref_userid" {
+  email = var.USER_ID
+}
